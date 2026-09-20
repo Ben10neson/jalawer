@@ -47,6 +47,11 @@ button{font:inherit;color:inherit}
 .menu button:hover{background:#222}
 .menu button[aria-current="true"]{background:var(--pink)}
 .menu button[aria-current="true"] small{color:#fff}
+.menu .menu-out{display:flex;width:100%;align-items:baseline;gap:12px;color:#fff;text-decoration:none;padding:12px 20px;margin-top:6px;border-top:2px solid #333}
+.menu .menu-out small{color:#a9a9b0;font-size:12px;font-weight:700;width:64px;flex:none}
+.menu .menu-out b{font-size:17px;font-weight:900}
+.menu .menu-out:hover{background:var(--pink)}
+.menu .menu-out:hover small{color:#fff}
 .scrim{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:40}
 .scene{flex:1;min-height:0;position:relative;overflow:hidden;margin-top:5px}
 .dock{flex:none;display:flex;align-items:stretch;background:var(--paper);border-top:4px solid var(--ink);min-height:98px;position:relative;z-index:20}
@@ -1362,7 +1367,8 @@ function buildView(){
   buildMenu();
 }
 function buildMenu(){
-  $('#menu').innerHTML=VIEW.map((g,i)=>`<button type="button" data-seg="${i}"><small>${g.kick}</small><b>${g.title}</b></button>`).join('');
+  const sheetLink=`<a class="menu-out" href="人物卡.html" target="_blank" rel="noopener"><small>附录</small><b>人物卡模板</b></a>`;
+  $('#menu').innerHTML=VIEW.map((g,i)=>`<button type="button" data-seg="${i}"><small>${g.kick}</small><b>${g.title}</b></button>`).join('')+sheetLink;
   $$('#menu [data-seg]').forEach(b=>b.addEventListener('click',()=>go(+b.dataset.seg,0)));
 }
 function setMode(m){
