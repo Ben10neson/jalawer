@@ -1,0 +1,1700 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>弹丸论破跑团规则书</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#e8e8eb;--paper:#ffffff;--ink:#000000;--muted:#5b5b62;--line:#d2d2d8;--field:#f2f2f4;
+  --pink:#f0167d;--pink-soft:#ffe0ee;--on-pink:#ffffff;--on-ink:#ffffff;
+  --font:"Noto Sans SC","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Source Han Sans SC",sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--bg:#050506;--paper:#17171b;--ink:#f2f2f4;--muted:#a5a5ac;--line:#3a3a41;--field:#222227;--pink:#ff3b92;--pink-soft:#3b1328;--on-pink:#ffffff;--on-ink:#000000;color-scheme:dark}
+}
+:root[data-theme="dark"]{--bg:#050506;--paper:#17171b;--ink:#f2f2f4;--muted:#a5a5ac;--line:#3a3a41;--field:#222227;--pink:#ff3b92;--pink-soft:#3b1328;--on-pink:#ffffff;--on-ink:#000000;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow:hidden}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--pink);outline-offset:2px}
+[hidden]{display:none!important}
+
+/* ===== 外框 ===== */
+.app{display:flex;flex-direction:column;height:100vh;height:100dvh}
+.bar{flex:none;display:flex;align-items:center;gap:14px;background:#000;color:#fff;height:56px;position:relative;z-index:30;padding-right:14px}
+.bar::after{content:"";position:absolute;left:0;right:0;bottom:-5px;height:5px;background:var(--pink)}
+.menu-btn{align-self:stretch;border:0;background:var(--pink);color:#fff;font-weight:900;font-size:16px;padding:0 30px 0 18px;clip-path:polygon(0 0,100% 0,calc(100% - 16px) 100%,0 100%);cursor:pointer}
+.bar-title{display:flex;align-items:baseline;gap:12px;min-width:0;flex:1}
+.bar-kick{font-size:13px;font-weight:700;color:#c8c8ce;white-space:nowrap}
+.bar-title b{font-size:21px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar-prog{font-weight:900;font-size:14px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.theme-btn{border:2px solid #fff;background:transparent;color:#fff;font-weight:700;font-size:13px;padding:3px 10px;cursor:pointer}
+.mode-sw{display:flex;border:2px solid #fff;flex:none}
+.mode-sw button{border:0;background:transparent;color:#fff;font-weight:900;font-size:13px;padding:4px 12px;cursor:pointer;min-height:34px;white-space:nowrap}
+.mode-sw button[aria-pressed="true"]{background:var(--pink)}
+.gm-only{display:inline-block;font-size:12px;font-weight:900;background:#ffd23f;color:#000;padding:1px 8px;margin-right:6px}
+.menu{position:fixed;top:61px;left:0;bottom:0;width:min(330px,88vw);background:#000;color:#fff;z-index:45;overflow:auto;padding:8px 0 20px;transform:translateX(-102%);transition:transform .28s cubic-bezier(.2,.8,.2,1);border-right:5px solid var(--pink)}
+.menu.open{transform:none}
+.menu button{display:flex;width:100%;align-items:baseline;gap:12px;border:0;background:transparent;color:#fff;text-align:left;padding:12px 20px;cursor:pointer}
+.menu button small{color:#a9a9b0;font-size:12px;font-weight:700;width:64px;flex:none}
+.menu button b{font-size:17px;font-weight:900}
+.menu button:hover{background:#222}
+.menu button[aria-current="true"]{background:var(--pink)}
+.menu button[aria-current="true"] small{color:#fff}
+.menu .menu-out{display:flex;width:100%;align-items:baseline;gap:12px;color:#fff;text-decoration:none;padding:12px 20px;margin-top:6px;border-top:2px solid #333}
+.menu .menu-out small{color:#a9a9b0;font-size:12px;font-weight:700;width:64px;flex:none}
+.menu .menu-out b{font-size:17px;font-weight:900}
+.menu .menu-out:hover{background:var(--pink)}
+.menu .menu-out:hover small{color:#fff}
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:40}
+.scene{flex:1;min-height:0;position:relative;overflow:hidden;margin-top:5px}
+.dock{flex:none;display:flex;align-items:stretch;background:var(--paper);border-top:4px solid var(--ink);min-height:98px;position:relative;z-index:20}
+.caption{flex:1;min-width:0;padding:12px 20px;font-size:17px;font-weight:500;line-height:1.65;overflow:auto;max-height:30vh}
+.caption b{color:var(--pink);font-weight:900}
+.caption.typing{animation:capIn .45s ease-out both}
+@keyframes capIn{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+.ctrl{flex:none;display:flex;flex-direction:column;justify-content:center;gap:8px;padding:10px 14px;border-left:3px solid var(--ink)}
+.ctrl-row{display:flex;gap:8px;align-items:center}
+.cbtn{min-height:46px;border:3px solid var(--ink);background:var(--paper);font-weight:900;padding:0 16px;cursor:pointer;white-space:nowrap}
+.cbtn.primary{background:var(--pink);border-color:var(--pink);color:#fff;padding:0 26px;min-width:120px}
+.cbtn:disabled{opacity:.35;cursor:default}
+.cbtn.small{min-height:34px;padding:0 10px;font-size:13px;border-width:2px}
+.cbtn.unread{position:relative;border-color:var(--pink);color:var(--pink)}
+.cbtn.unread::after{content:"！";position:absolute;top:-10px;right:-10px;width:24px;height:24px;border-radius:50%;background:var(--pink);color:#fff;font-size:14px;font-weight:900;display:flex;align-items:center;justify-content:center;border:2px solid var(--paper);animation:bell 1.4s ease-in-out infinite}
+@keyframes bell{0%,100%{transform:scale(1)}20%{transform:scale(1.22)}40%{transform:scale(1)}}
+.stepbar{display:flex;gap:3px;flex-wrap:wrap;max-width:330px}
+.stepbar i{width:12px;height:6px;background:var(--line)}
+.stepbar i.done{background:var(--ink)}
+.stepbar i.on{background:var(--pink)}
+
+/* 细则抽屉 */
+.drawer{position:fixed;right:0;top:61px;bottom:0;width:min(440px,92vw);background:var(--paper);border-left:5px solid var(--ink);z-index:45;transform:translateX(104%);transition:transform .28s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column}
+.drawer.open{transform:none}
+.drawer header{display:flex;align-items:center;justify-content:space-between;background:var(--ink);color:var(--on-ink);padding:10px 16px}
+.drawer header b{font-size:18px;font-weight:900}
+.drawer header button{border:2px solid currentColor;background:transparent;color:inherit;font-weight:900;padding:2px 10px;cursor:pointer}
+.drawer-body{overflow:auto;padding:14px 18px 30px}
+.drawer-body h4{margin:16px 0 6px;font-size:15px;font-weight:900;display:inline-block;background:var(--pink);color:#fff;padding:0 10px}
+.drawer-body ul{margin:0;padding-left:20px}
+.drawer-body li{margin:6px 0;font-size:15px}
+
+/* 转场 */
+.wipe{position:fixed;inset:0;z-index:70;pointer-events:none;overflow:hidden;visibility:hidden}
+.wipe.run{visibility:visible}
+.wipe i{position:absolute;top:-20%;bottom:-20%;left:-30%;width:160%;transform:translateX(-130%) skewX(-20deg)}
+.wipe .w1{background:var(--pink)}
+.wipe .w2{background:#000;left:-25%}
+.wipe .w3{background:#fff;width:14%;left:40%}
+.wipe.run .w1{animation:wipe 1.3s cubic-bezier(.75,0,.2,1) both}
+.wipe.run .w2{animation:wipe 1.3s cubic-bezier(.75,0,.2,1) .07s both}
+.wipe.run .w3{animation:wipeS 1.3s cubic-bezier(.75,0,.2,1) .1s both}
+@keyframes wipe{0%{transform:translateX(-130%) skewX(-20deg)}38%,64%{transform:translateX(0) skewX(-20deg)}100%{transform:translateX(130%) skewX(-20deg)}}
+@keyframes wipeS{0%{transform:translateX(-900%) skewX(-20deg)}38%,64%{transform:translateX(260%) skewX(-20deg)}100%{transform:translateX(900%) skewX(-20deg)}}
+.wipe-t{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;opacity:0}
+.wipe.run .wipe-t{animation:wipeT 1.3s ease both}
+.wipe-t small{font-size:18px;font-weight:900;background:var(--pink);padding:2px 16px;transform:skewX(-12deg)}
+.wipe-t b{font-size:clamp(44px,9vw,92px);font-weight:900;line-height:1.1;margin-top:10px;text-shadow:6px 6px 0 var(--pink)}
+@keyframes wipeT{0%,30%{opacity:0;transform:scale(1.35)}40%,62%{opacity:1;transform:scale(1)}74%,100%{opacity:0;transform:scale(.96)}}
+
+/* ===== 通用 ===== */
+.rv{animation:rv .55s cubic-bezier(.2,.8,.2,1) both;animation-delay:var(--d,0ms)}
+@keyframes rv{from{opacity:0;transform:translateX(-26px) skewX(-8deg)}to{opacity:1;transform:none}}
+.pop{animation:pop .45s cubic-bezier(.2,1.5,.35,1) both;animation-delay:var(--d,0ms)}
+@keyframes pop{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:none}}
+.stampin{animation:stamp .5s cubic-bezier(.2,1.35,.3,1) both;animation-delay:var(--d,0ms)}
+@keyframes stamp{0%{opacity:0;transform:scale(2.4) rotate(-14deg)}100%{opacity:1;transform:scale(1) rotate(-3deg)}}
+.flip{animation:flip .6s cubic-bezier(.2,.8,.2,1) both;animation-delay:var(--d,0ms);transform-origin:50% 50%}
+@keyframes flip{0%{opacity:0;transform:perspective(600px) rotateY(-90deg)}100%{opacity:1;transform:perspective(600px) rotateY(0)}}
+.shake{animation:shake .45s both}
+@keyframes shake{0%,100%{transform:none}20%{transform:translate(-6px,2px)}40%{transform:translate(5px,-2px)}60%{transform:translate(-4px,1px)}80%{transform:translate(3px,0)}}
+.still .rv,.still .pop,.still .stampin,.still .flip,.still .shake,.still.rv,.still.pop{animation:none!important}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-delay:0ms!important;transition-duration:.01ms!important}}
+
+.tag{display:inline-block;background:var(--pink);color:var(--on-pink);font-weight:900;padding:2px 12px;transform:skewX(-10deg);line-height:1.5;white-space:nowrap}
+.tag>span{display:inline-block;transform:skewX(10deg)}
+.tag.dark{background:var(--ink);color:var(--on-ink)}
+.tag.line{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 2px var(--ink)}
+.tag.big{font-size:22px;padding:4px 20px}
+.tag.holo{background:linear-gradient(100deg,#ff5fae,#ffd46b 40%,#8ff3ff 70%,#d3a8ff);color:#000}
+.kick{display:inline-block;font-size:14px;font-weight:900;background:var(--pink);color:#fff;padding:2px 12px;transform:skewX(-10deg);margin-bottom:10px}
+.kick>span{display:inline-block;transform:skewX(10deg)}
+.h-tab{display:flex;align-items:stretch;margin:0 0 14px;font-size:26px;font-weight:900;line-height:1}
+.h-tab span{background:var(--ink);color:var(--on-ink);padding:10px 30px 10px 18px;clip-path:polygon(0 0,100% 0,calc(100% - 18px) 100%,0 100%)}
+.h-tab::after{content:"";flex:1;border-bottom:7px solid var(--pink);margin-left:-10px}
+.h3{margin:0 0 10px;font-size:19px;font-weight:900;display:flex;align-items:center;gap:8px}
+.h3::before{content:"";width:12px;height:18px;background:var(--pink);transform:skewX(-14deg)}
+.box{background:var(--paper);border:3px solid var(--ink);padding:16px 18px}
+.box+.box{margin-top:14px}
+.lead{font-size:20px;font-weight:700;line-height:1.6;margin:0 0 12px}
+.lead b,.pts b,.prose b,.mini b{color:var(--pink);font-weight:900}
+.prose p{margin:0 0 12px;font-size:16px;line-height:1.85}
+.prose p:last-child{margin-bottom:0}
+.pts{margin:0;padding:0;list-style:none}
+.pts li{position:relative;padding:7px 0 7px 24px;border-bottom:2px solid var(--line);font-size:16px}
+.pts li:last-child{border-bottom:0}
+.pts li::before{content:"";position:absolute;left:3px;top:16px;width:11px;height:11px;background:var(--pink);transform:skewX(-14deg)}
+.mini{font-size:14px;color:var(--muted);margin:8px 0 0}
+.seg-sw{display:inline-grid;grid-auto-flow:column;border:3px solid var(--ink)}
+.seg-sw button{border:0;border-right:3px solid var(--ink);background:var(--paper);font-weight:900;padding:6px 14px;min-height:40px;cursor:pointer}
+.seg-sw button:last-child{border-right:0}
+.seg-sw button[aria-pressed="true"]{background:var(--ink);color:var(--on-ink)}
+.btn{border:3px solid var(--ink);background:var(--ink);color:var(--on-ink);font-weight:900;padding:8px 16px;min-height:44px;cursor:pointer}
+.btn.pink{background:var(--pink);border-color:var(--pink);color:#fff}
+.btn.line{background:var(--paper);color:var(--ink)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* ===== 页面 ===== */
+.page{position:absolute;inset:0;overflow-y:auto;padding:28px 24px 48px;background:var(--bg)}
+.page::before{content:"";position:fixed;right:-120px;top:40px;width:420px;height:140%;background:repeating-linear-gradient(-60deg,transparent 0 22px,rgba(240,22,125,.06) 22px 30px);pointer-events:none;transform:skewX(-18deg)}
+.pg{max-width:1120px;margin:0 auto;position:relative}
+.pg.narrow{max-width:820px}
+.pg.center{text-align:center}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:26px;align-items:start}
+.three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+
+.cover{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;text-align:center;padding:20px}
+.cover-band{background:#000;color:#fff;padding:34px 48px 30px;position:relative;box-shadow:14px 14px 0 var(--pink);max-width:92vw}
+.cover-band small{display:inline-block;font-size:16px;font-weight:900;background:var(--pink);padding:2px 14px;transform:skewX(-12deg)}
+.cover-band h1{margin:12px 0 6px;font-size:clamp(34px,6.4vw,70px);line-height:1.1;font-weight:900}
+.cover-band p{margin:0;font-size:18px;font-weight:700;color:#d9d9de}
+.cover-hint{font-weight:900;font-size:15px;color:var(--muted)}
+.big{font-size:22px;font-weight:700;line-height:1.6;margin:0 0 16px}
+.slam{display:inline-block;font-size:clamp(30px,5vw,52px);font-weight:900;line-height:1.2;background:var(--pink);color:#fff;padding:6px 26px;transform:rotate(-3deg);box-shadow:8px 8px 0 var(--ink);margin:6px 0 26px}
+.slam.huge{font-size:clamp(34px,6.5vw,68px)}
+.duo{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin:0 0 20px}
+.duo-x{display:flex;align-items:center;gap:12px;border:3px solid var(--ink);background:var(--paper);padding:10px 20px;font-size:24px;font-weight:900}
+.duo-x s{color:var(--muted);text-decoration-thickness:4px;text-decoration-color:var(--pink)}
+.duo-x::after{content:none}
+.duo-x b{color:var(--pink)}
+.tl{position:relative;margin:4px 0 0;padding-left:34px}
+.tl::before{content:"";position:absolute;left:11px;top:6px;bottom:6px;width:5px;background:var(--ink)}
+.tl-i{position:relative;margin-bottom:14px}
+.tl-i::before{content:"";position:absolute;left:-31px;top:8px;width:18px;height:18px;background:var(--pink);border:3px solid var(--ink);transform:rotate(45deg)}
+.tl-i b{display:block;font-size:19px;font-weight:900}
+.tl-i p{margin:2px 0 0;font-size:15px;line-height:1.75;color:var(--ink)}
+.tl-i.worst b{color:var(--pink)}
+.goal{border:3px solid var(--ink);background:var(--paper);padding:14px 16px;position:relative}
+.goal em{position:absolute;top:-16px;left:12px;font-style:normal;font-size:30px;font-weight:900;color:var(--pink);background:var(--bg);padding:0 6px;line-height:1}
+.goal p{margin:6px 0 0;font-size:16px;line-height:1.75}
+.bb{display:grid;grid-template-columns:1fr 2.2fr;max-width:640px;margin:0 auto 22px;border:4px solid var(--ink)}
+.bb>div{padding:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.bb b{font-size:22px;font-weight:900}
+.bb-fair{background:var(--pink);color:#fff}
+.bb-black{background:#000;color:#fff;background-image:repeating-linear-gradient(45deg,#000 0 10px,#141417 10px 20px)}
+.pg.center .prose{text-align:left}
+.truths{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:18px}
+.truth{background:#000;color:#fff;padding:18px 16px 16px;box-shadow:7px 7px 0 var(--pink);text-align:left}
+.truth b{display:block;font-size:26px;font-weight:900;margin-bottom:6px}
+.truth p{margin:0;font-size:15px;line-height:1.7;color:#e2e2e6}
+.chev{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 20px}
+.chev span{background:var(--ink);color:var(--on-ink);font-weight:900;padding:8px 22px 8px 16px;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 50%,calc(100% - 12px) 100%,0 100%,12px 50%);font-size:16px}
+.chev span:first-child{clip-path:polygon(0 0,calc(100% - 12px) 0,100% 50%,calc(100% - 12px) 100%,0 100%)}
+.chev span.hot{background:var(--pink);color:#fff}
+
+/* 才能卡 */
+.tc{background:var(--paper);border:4px solid var(--ink);box-shadow:10px 10px 0 var(--pink);padding:18px 18px 16px}
+.tc-name{font-size:34px;font-weight:900;line-height:1.2;margin:8px 0 14px}
+.tc-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.tc-slot{border:3px dashed var(--line);min-height:112px;padding:10px;display:flex;flex-direction:column;gap:6px;position:relative}
+.tc-slot.on{border:3px solid var(--ink);background:var(--paper)}
+.tc-slot small{font-size:12px;font-weight:900;color:var(--muted)}
+.tc-slot b{font-size:20px;font-weight:900;line-height:1.3}
+.tc-slot p{margin:0;font-size:14px;line-height:1.5}
+.tc-slot.battle{border-color:var(--pink);box-shadow:inset 0 0 0 2px var(--pink)}
+.tc-slot .mark{position:absolute;top:-12px;right:8px}
+.tc-lim{margin-top:10px;border:3px solid var(--ink);background:#000;color:#fff;padding:10px 12px;min-height:66px}
+.tc-lim.empty{background:transparent;border-style:dashed;border-color:var(--line);color:var(--muted)}
+.tc-lim small{font-size:12px;font-weight:900;color:#bbb}
+.tc-lim b{display:block;font-size:17px;font-weight:900}
+.form{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+.form-x{border:3px solid var(--ink);padding:10px 12px;cursor:pointer;background:var(--paper);text-align:left;font-weight:700}
+.form-x[aria-pressed="true"]{background:var(--ink);color:var(--on-ink)}
+.form-x code{font-family:inherit;background:var(--pink);color:#fff;padding:0 6px;font-weight:900}
+.cmp{display:grid;grid-template-columns:1fr 1fr;border:3px solid var(--ink)}
+.cmp>div{padding:14px}
+.cmp>div+div{border-left:3px solid var(--ink);background:var(--pink-soft)}
+.cmp small{display:block;font-weight:900;font-size:13px;margin-bottom:4px}
+.cmp p{margin:0;font-size:17px;font-weight:700;line-height:1.6}
+.act{display:flex;gap:10px;align-items:center;margin:0 0 12px;flex-wrap:wrap}
+.act .step{border:3px solid var(--ink);padding:6px 12px;font-weight:900;background:var(--paper)}
+.act .arrow{font-weight:900;color:var(--pink)}
+.lim-card{border:3px solid var(--ink);background:var(--paper);padding:14px 16px}
+.lim-card b{font-size:22px;font-weight:900}
+.lim-card p{margin:6px 0 0;font-size:15px}
+.icon-x{display:inline-flex;width:40px;height:40px;align-items:center;justify-content:center;background:var(--ink);color:var(--on-ink);font-weight:900;font-size:20px;margin-right:8px;flex:none}
+.slot3{display:grid;grid-template-columns:repeat(3,1fr);border:3px solid var(--ink);margin-top:10px}
+.slot3>div{padding:10px;border-right:2px solid var(--line);text-align:center}
+.slot3>div:last-child{border-right:0}
+.slot3 small{display:block;font-size:13px;font-weight:900;color:var(--muted)}
+.slot3 b{font-size:30px;font-weight:900;line-height:1.2}
+.slot3 .hot{background:var(--pink);color:#fff}
+.slot3 .hot small{color:#fff}
+.slot3 .lock{background:repeating-linear-gradient(45deg,var(--field) 0 8px,var(--paper) 8px 16px)}
+.toggles{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0 0}
+
+/* 属性 */
+.at-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.at-panel{background:var(--paper);border:4px solid var(--ink);padding:18px;position:relative;overflow:hidden}
+.at-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.at-name{font-size:30px;font-weight:900;min-width:70px}
+.dots{display:flex;gap:10px}
+.dot{width:48px;height:48px;border-radius:50%;border:4px solid var(--ink);background:var(--paper);cursor:pointer;padding:0;transition:transform .15s}
+.dot:hover{transform:scale(1.08)}
+.dot.on{background:var(--pink)}
+.dot:disabled{opacity:.3;cursor:not-allowed}
+.at-big{display:flex;align-items:baseline;gap:10px;margin:14px 0 6px}
+.at-big span{font-size:16px;font-weight:900}
+.at-big b{font-size:72px;font-weight:900;line-height:1;color:var(--pink)}
+.pips{display:flex;gap:6px}
+.pips i{width:30px;height:30px;background:var(--pink);border:3px solid var(--ink);transform:skewX(-12deg)}
+.pips i.lost{background:transparent;border-style:dashed}
+.unlocks{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-top:14px}
+.un{border:3px dashed var(--line);padding:10px 12px;color:var(--muted);position:relative;min-height:84px}
+.un small{display:block;font-size:12px;font-weight:900}
+.un b{display:block;font-size:18px;font-weight:900}
+.un p{margin:2px 0 0;font-size:14px;line-height:1.5}
+.un.on{border:3px solid var(--ink);color:var(--ink);background:var(--paper)}
+.un.on b{color:var(--pink)}
+.un.fx{animation:unlock .7s cubic-bezier(.2,1.4,.3,1) both}
+@keyframes unlock{0%{transform:scale(.7) rotate(-4deg);background:var(--pink)}60%{transform:scale(1.06) rotate(1deg)}100%{transform:none}}
+.bigstamp{position:absolute;right:18px;top:16px;font-size:38px;font-weight:900;color:var(--pink);border:5px solid var(--pink);padding:0 14px;transform:rotate(-8deg);background:var(--paper);pointer-events:none}
+.carry{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.carry i{width:46px;height:46px;border:3px solid var(--ink);background:var(--field);display:flex;align-items:center;justify-content:center;font-style:normal;font-weight:900}
+.carry i.new{animation:pop .4s cubic-bezier(.2,1.5,.35,1) both}
+.qn{display:flex;align-items:baseline;gap:8px;margin:12px 0 0}
+.qn b{font-size:56px;font-weight:900;color:var(--pink);line-height:1}
+.ab-demo{margin-top:8px;font-size:14px;color:var(--ink)}
+.ripple{display:inline-block;width:14px;height:14px;border-radius:50%;border:3px solid var(--pink);animation:rip 1.4s infinite}
+@keyframes rip{0%{transform:scale(.4);opacity:1}100%{transform:scale(2.4);opacity:0}}
+.eyekw{background:linear-gradient(transparent 55%,rgba(240,22,125,.35) 55%);font-weight:900}
+.ping{display:inline-block;background:#000;color:#fff;font-size:13px;font-weight:900;padding:2px 8px;animation:ping 1.6s infinite}
+@keyframes ping{0%,100%{transform:none}10%{transform:translateY(-3px)}20%{transform:none}}
+.g16{display:grid;grid-template-columns:repeat(4,26px);gap:3px;margin-top:6px}
+.g16 span{width:26px;height:26px;border:2px solid var(--ink);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900}
+.g16 span.sel{background:var(--pink);color:#fff;border-color:var(--pink)}
+.sparkles{position:absolute;inset:0;pointer-events:none;background:linear-gradient(135deg,rgba(255,95,174,.18),rgba(255,212,107,.2) 45%,rgba(143,243,255,.18) 75%,rgba(211,168,255,.2))}
+.sparkles i{position:absolute;width:30px;height:30px;animation:tw 1.6s ease-in-out infinite}
+.sparkles i::before,.sparkles i::after{content:"";position:absolute;left:50%;top:50%;background:#ffe27a;border-radius:50%;box-shadow:0 0 8px 2px rgba(255,200,80,.9)}
+.sparkles i::before{width:5px;height:30px;margin:-15px 0 0 -2.5px}
+.sparkles i::after{width:30px;height:5px;margin:-2.5px 0 0 -15px}
+@keyframes tw{0%,100%{transform:scale(.3) rotate(0);opacity:.2}50%{transform:scale(1) rotate(45deg);opacity:1}}
+.itemtags{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.it{border:3px solid var(--ink);background:var(--paper);padding:12px 10px;cursor:pointer;text-align:center;font-weight:900;font-size:17px}
+.it[aria-pressed="true"]{background:var(--ink);color:var(--on-ink)}
+.it small{display:block;font-size:12px;color:var(--muted)}
+.it[aria-pressed="true"] small{color:#bbb}
+.itfx{border:4px solid var(--ink);background:var(--paper);padding:16px 18px;min-height:220px;position:relative;overflow:hidden}
+.flash{position:absolute;inset:0;background:#fff;animation:flash .5s ease-out both;pointer-events:none}
+@keyframes flash{0%{opacity:.95}100%{opacity:0}}
+.clue{display:inline-block;border:3px solid var(--ink);padding:2px 10px;font-weight:900;margin:4px 6px 0 0;background:var(--pink-soft)}
+.vial{display:inline-block;width:34px;height:48px;border:3px solid var(--ink);border-radius:0 0 12px 12px;position:relative;overflow:hidden;vertical-align:middle}
+.vial::after{content:"";position:absolute;left:0;right:0;bottom:0;height:60%;background:var(--pink);animation:fill 1.2s ease both}
+.vial.anti::after{background:#1b9a72}
+@keyframes fill{from{height:0}to{height:60%}}
+.gear{display:inline-block;width:36px;height:36px;border:7px dashed var(--ink);border-radius:50%;animation:spin 3s linear infinite;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* 羁绊 */
+.bond-row{display:grid;grid-template-columns:130px 150px 1fr;gap:10px;align-items:center;border-bottom:3px solid var(--line);padding:12px 0}
+.bond-row:last-child{border-bottom:0}
+.bond-row .k{font-weight:900;font-size:17px}
+.bond-row .k.neg{color:var(--pink)}
+.bond-row .t{justify-self:start}
+.bond-row p{margin:0;font-size:16px}
+.libchips{display:flex;flex-wrap:wrap;gap:6px}
+.libchips span{border:2px solid var(--ink);padding:1px 10px;font-weight:700;font-size:14px;background:var(--paper)}
+.ask{font-size:clamp(24px,3.6vw,38px);font-weight:900;line-height:1.35;background:#000;color:#fff;padding:22px 24px;box-shadow:10px 10px 0 var(--pink);margin-bottom:20px}
+.ask b{color:var(--pink)}
+.submit{display:flex;align-items:center;justify-content:center;gap:40px;flex-wrap:wrap;min-height:320px}
+.mini-card{width:220px;background:var(--paper);border:4px solid var(--ink);padding:12px;box-shadow:8px 8px 0 var(--pink)}
+.mini-card .mc-h{background:#000;color:#fff;font-weight:900;padding:2px 8px;font-size:13px}
+.mini-card b{display:block;font-size:22px;font-weight:900;margin:8px 0 4px}
+.mini-card i{display:block;height:8px;background:var(--line);margin:6px 0}
+.mini-card.fly{animation:flyc 1.1s cubic-bezier(.6,0,.3,1) both}
+@keyframes flyc{0%{transform:none}45%{transform:translate(80px,-40px) rotate(8deg) scale(.9)}100%{transform:translate(260px,10px) rotate(0) scale(.35);opacity:0}}
+.gm-box{width:220px;height:200px;background:#000;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;font-weight:900;font-size:20px;position:relative}
+.gm-box .ok{position:absolute;bottom:-18px;right:-14px;background:var(--pink);color:#fff;font-size:22px;padding:2px 14px;transform:rotate(-8deg)}
+
+/* ===== 舞台（前台／后台） ===== */
+.stage{position:absolute;inset:0;background:#0b0b0d;overflow:hidden}
+.stage::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(-45deg,rgba(255,255,255,.04) 0 2px,transparent 2px 16px);pointer-events:none}
+.stage::after{content:"";position:absolute;left:-10%;bottom:-40%;width:60%;height:90%;background:var(--pink);opacity:.14;transform:skewX(-24deg);pointer-events:none}
+.front{position:absolute;left:50%;top:16px;bottom:16px;width:min(800px,calc(100% - 32px));transform:translateX(-50%);background:var(--paper);border:4px solid #000;display:flex;flex-direction:column;box-shadow:10px 10px 0 var(--pink);z-index:2}
+.front-head{flex:none;display:flex;align-items:center;gap:8px;background:#000;color:#fff;padding:6px 10px;min-height:44px}
+.front-head b{font-size:18px;font-weight:900;margin-right:4px}
+.chip{display:inline-block;font-size:13px;font-weight:900;background:var(--pink);color:#fff;padding:1px 10px;transform:skewX(-10deg)}
+.chip.w{background:#fff;color:#000}
+.front.court{box-shadow:10px 10px 0 #ffd23f}
+.front.court .front-head{background:var(--pink)}
+.front.court .front-head .chip{background:#000}
+.widget{flex:none;border-bottom:3px solid var(--ink);background:var(--field);max-height:56%;overflow:auto}
+.log{flex:1;min-height:0;overflow-y:auto;padding:12px 14px 16px;display:flex;flex-direction:column;gap:9px;scroll-behavior:smooth}
+.back{position:absolute;right:16px;bottom:16px;width:320px;height:min(48%,380px);background:var(--paper);border:4px solid var(--pink);display:flex;flex-direction:column;z-index:6;box-shadow:6px 6px 0 #000}
+.back-head{flex:none;display:flex;align-items:center;gap:8px;background:var(--pink);color:#fff;padding:4px 8px 4px 10px;min-height:38px}
+.back-head b{font-weight:900;flex:1}
+.back-head .ptc{font-size:13px;font-weight:900;background:#000;color:#fff;padding:0 8px;white-space:nowrap}
+.back-head .ptc.bump{animation:pop .45s cubic-bezier(.2,1.5,.35,1)}
+.back-tg{border:2px solid #fff;background:transparent;color:#fff;font-size:12px;font-weight:900;padding:0 6px;cursor:pointer;display:none}
+.back .log{padding:10px;gap:7px}
+.bwidget{flex:none;border-bottom:3px solid var(--pink);max-height:60%;overflow:auto;background:var(--field)}
+.msg{display:flex;gap:8px;align-items:flex-start}
+.msg .av{width:36px;height:36px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff;background:var(--c,#444);font-size:15px;border:2px solid #000}
+.msg .bd{max-width:84%;min-width:0}
+.msg .nm{font-size:12px;font-weight:900;color:var(--muted);line-height:1.3;margin-bottom:2px}
+.msg .tx{background:var(--field);border:2px solid var(--line);padding:6px 11px;font-size:15px;line-height:1.6;word-break:break-word}
+.msg.gm .av{background:#000;border-color:var(--pink)}
+.msg.gm .tx{background:#000;color:#fff;border-color:#000}
+.msg.me{flex-direction:row-reverse}
+.msg.me .nm{text-align:right}
+.msg.me .tx{background:var(--pink);border-color:var(--pink);color:#fff}
+.back .msg .av{width:28px;height:28px;font-size:12px}
+.back .msg .tx{font-size:14px;padding:4px 9px}
+.m-sys{align-self:center;font-size:13px;font-weight:900;background:var(--ink);color:var(--on-ink);padding:2px 14px;transform:skewX(-10deg);text-align:center}
+.m-note{font-size:14px;border-left:5px solid var(--pink);padding:3px 9px;background:var(--pink-soft);font-weight:700}
+.m-hide{align-self:flex-start;font-size:14px;font-weight:900;border:2px dashed var(--ink);padding:3px 10px;color:var(--muted)}
+.m-stamp{align-self:center;font-size:42px;font-weight:900;color:var(--pink);border:6px solid var(--pink);padding:0 22px;transform:rotate(-7deg);line-height:1.3;background:var(--paper);margin:4px 0}
+.m-stamp.agree{color:#0a8f5e;border-color:#0a8f5e}
+.m-bullet{align-self:center;display:flex;align-items:center;gap:0;border:3px solid #000;background:#fff;color:#000;box-shadow:5px 5px 0 var(--pink)}
+.m-bullet .k{background:#000;color:#fff;font-weight:900;padding:4px 10px;font-size:13px}
+.m-bullet b{padding:4px 12px;font-size:17px;font-weight:900}
+.m-bullet .by{font-size:12px;font-weight:900;padding:4px 10px;border-left:2px solid #000;color:#555}
+.m-card{align-self:flex-start;margin-left:44px;width:260px;border:3px solid #000;background:#fff;color:#000;box-shadow:5px 5px 0 var(--pink)}
+.m-card .h{background:#000;color:#fff;font-size:12px;font-weight:900;padding:2px 8px;display:flex;justify-content:space-between}
+.m-card .b{padding:8px 10px}
+.m-card .n{font-size:18px;font-weight:900}
+.m-card .t{display:inline-block;font-size:12px;font-weight:900;background:var(--pink);color:#fff;padding:0 6px;margin:2px 0 6px}
+.m-card .tg{display:flex;flex-wrap:wrap;gap:4px}
+.m-card .tg span{font-size:13px;font-weight:900;border:2px solid #000;padding:0 6px}
+.m-card .tg span.btl{background:var(--pink);color:#fff;border-color:var(--pink)}
+.m-card .lim{font-size:12px;margin-top:6px;border-top:2px solid #ddd;padding-top:4px}
+.new{animation:msgIn .38s cubic-bezier(.2,.8,.2,1) both}
+.msg.new .tx{animation:typeIn .55s steps(18,end) both}
+@keyframes msgIn{from{opacity:0;transform:translateX(-18px)}to{opacity:1;transform:none}}
+@keyframes typeIn{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+.m-stamp.new{animation:stamp .5s cubic-bezier(.2,1.35,.3,1) both}
+.fly-bullet{position:absolute;left:-40%;top:42%;z-index:30;display:flex;align-items:center;border:3px solid #000;background:#fff;color:#000;box-shadow:6px 6px 0 var(--pink);font-weight:900;animation:flyb .8s cubic-bezier(.6,0,.2,1) both}
+.fly-bullet .k{background:#000;color:#fff;padding:6px 12px;font-size:14px}
+.fly-bullet b{padding:6px 16px;font-size:22px}
+@keyframes flyb{0%{transform:translateX(0) skewX(-20deg)}70%{transform:translateX(95vw) skewX(-20deg)}100%{transform:translateX(95vw) skewX(0);opacity:0}}
+.alarm{position:absolute;inset:0;z-index:25;pointer-events:none;background:var(--pink);animation:alarm 1.1s steps(1,end) both}
+@keyframes alarm{0%{opacity:.85}15%{opacity:0}30%{opacity:.75}45%{opacity:0}60%{opacity:.5}75%,100%{opacity:0}}
+.banner{position:absolute;left:0;right:0;top:36%;z-index:26;pointer-events:none;background:#000;color:#fff;text-align:center;font-size:clamp(34px,6vw,64px);font-weight:900;padding:6px 0;border-top:6px solid var(--pink);border-bottom:6px solid var(--pink);animation:banner 1.5s cubic-bezier(.7,0,.2,1) both}
+@keyframes banner{0%{transform:translateX(-110%) skewX(-10deg)}30%,75%{transform:translateX(0) skewX(-10deg)}100%{transform:translateX(110%) skewX(-10deg)}}
+
+/* 舞台小工具 */
+.w-pad{padding:12px 14px}
+.memo-ol{margin:0;padding-left:0;list-style:none;counter-reset:m}
+.memo-ol li{position:relative;padding:7px 0 7px 38px;border-bottom:2px solid var(--line);font-size:15px;counter-increment:m}
+.memo-ol li:last-child{border-bottom:0}
+.memo-ol li::before{content:counter(m);position:absolute;left:0;top:7px;width:26px;height:26px;background:var(--ink);color:var(--on-ink);font-weight:900;font-size:14px;display:flex;align-items:center;justify-content:center}
+.map{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:12px;padding:12px 14px}
+.rooms{position:relative;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,64px);gap:6px}
+.room{border:3px solid var(--ink);background:var(--paper);display:flex;align-items:flex-start;justify-content:flex-start;padding:3px 7px;font-weight:900;font-size:14px}
+.room.here{background:var(--ink);color:var(--on-ink)}
+.room.done{background:var(--pink-soft)}
+.pov{position:absolute;width:36px;height:36px;border-radius:50%;border:3px solid #ffd23f;background:var(--c);color:#fff;font-weight:900;display:flex;align-items:center;justify-content:center;transform:translate(-50%,-30%);transition:left .6s cubic-bezier(.5,0,.2,1),top .6s cubic-bezier(.5,0,.2,1);z-index:2}
+.pov::after{content:"主视角";position:absolute;top:-17px;left:50%;transform:translateX(-50%);font-size:10px;background:#ffd23f;color:#000;padding:0 4px;white-space:nowrap;font-weight:900}
+.team{display:flex;flex-direction:column;gap:6px}
+.team-h{font-size:13px;font-weight:900}
+.team-h b{color:var(--pink)}
+.slots{display:flex;gap:6px;flex-wrap:wrap}
+.tk{width:40px;height:40px;border-radius:50%;background:var(--c);color:#fff;font-weight:900;display:flex;align-items:center;justify-content:center;border:3px solid #000}
+.tk.empty{background:transparent;border:3px dashed var(--line)}
+.gone{font-size:13px;font-weight:900;display:flex;align-items:center;gap:6px;flex-wrap:wrap;border-top:2px dashed var(--line);padding-top:6px}
+.gone .tk{width:30px;height:30px;font-size:12px;opacity:.7}
+.why{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding:12px 14px}
+.why div{border:3px solid var(--ink);background:var(--paper);padding:10px;text-align:center;font-weight:900;font-size:15px}
+.why div i{display:block;font-style:normal;font-size:26px;color:var(--pink)}
+.sched{display:flex;align-items:center;justify-content:center;gap:14px;padding:16px;flex-wrap:wrap}
+.sched div{border:3px solid var(--ink);background:var(--paper);min-width:92px;text-align:center;padding:6px 10px}
+.sched div b{display:block;font-size:40px;font-weight:900;line-height:1.1;color:var(--pink)}
+.sched div span{font-size:13px;font-weight:900}
+.sched em{font-style:normal;font-size:28px;font-weight:900}
+.plan{display:grid;grid-template-columns:70px repeat(3,1fr);gap:4px;padding:12px 14px;font-size:13px;font-weight:900}
+.plan span{border:2px solid var(--ink);background:var(--paper);min-height:38px;display:flex;align-items:center;justify-content:center;gap:4px;flex-wrap:wrap;padding:2px}
+.plan span.h{background:var(--ink);color:var(--on-ink);border-color:var(--ink)}
+.plan .tk{width:24px;height:24px;font-size:11px;border-width:2px}
+.studio{padding:12px 14px;display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:12px;align-items:center}
+.studio-win{border:3px dashed var(--ink);background:var(--paper);padding:8px;display:flex;flex-direction:column;gap:6px}
+.studio-win .tt{font-size:12px;font-weight:900;color:var(--muted)}
+.studio-flow{display:flex;flex-direction:column;gap:6px;font-weight:900;font-size:14px}
+.studio-flow span{border:3px solid var(--ink);padding:4px 10px;background:var(--paper)}
+.studio-flow .ok{background:var(--pink);color:#fff;border-color:var(--pink)}
+.studio-flow .ng{border-style:dashed;color:var(--muted)}
+.shop{padding:8px}
+.shop-h{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:900;margin-bottom:6px}
+.shop-h b{color:var(--pink);font-size:16px}
+.shop-list{display:flex;flex-direction:column;gap:5px}
+.shop-list button{display:flex;justify-content:space-between;align-items:center;gap:8px;border:2px solid var(--ink);background:var(--paper);padding:4px 8px;font-size:13px;font-weight:900;cursor:pointer;text-align:left}
+.shop-list button:hover{background:var(--ink);color:var(--on-ink)}
+.shop-list button:disabled{opacity:.4;cursor:not-allowed}
+.shop-list em{font-style:normal;color:var(--pink)}
+.scenes{padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.scene-list{display:flex;gap:6px;flex-wrap:wrap}
+.scene-list span{border:3px solid var(--ink);background:var(--paper);padding:4px 14px;font-weight:900}
+.scene-list span.on{background:var(--ink);color:var(--on-ink)}
+.topics{display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-weight:900;font-size:14px}
+.desc{padding:12px 14px}
+.desc-h{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+.desc-h b{font-size:18px;font-weight:900}
+.desc-t{font-size:16px;line-height:1.9;background:var(--paper);border:3px solid var(--ink);padding:10px 14px}
+.kw{background:none;border:0;padding:0;font:inherit;color:inherit;cursor:default}
+.eye .kw{background:linear-gradient(transparent 50%,rgba(240,22,125,.4) 50%);font-weight:900;cursor:pointer;animation:kwOn .6s both;animation-delay:var(--d,0ms)}
+.eye .kw.noted{background:var(--pink);color:#fff}
+@keyframes kwOn{0%{background-size:0 100%}100%{background-size:100% 100%}}
+.seats{display:flex;justify-content:center;gap:10px;padding:12px;flex-wrap:wrap}
+.seat{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:12px;font-weight:900;width:70px;transition:opacity .3s,filter .3s}
+.seat .tk{width:46px;height:46px}
+.seat.mute{opacity:.35;filter:grayscale(1)}
+.seat.mute em{font-style:normal;font-size:11px;background:#000;color:#fff;padding:0 4px}
+.seat.talk .tk{box-shadow:0 0 0 4px var(--pink);animation:ping 1.6s infinite}
+.vote{padding:12px 14px}
+.vote-q{font-weight:900;font-size:17px;margin-bottom:8px}
+.vote-opts{display:flex;flex-direction:column;gap:6px}
+.vote-opt{position:relative;display:flex;align-items:center;justify-content:space-between;border:3px solid var(--ink);background:var(--paper);padding:6px 12px;font-weight:900;cursor:pointer;overflow:hidden;text-align:left}
+.vote-opt i{position:absolute;left:0;top:0;bottom:0;background:var(--pink-soft);width:0;transition:width .8s cubic-bezier(.2,.8,.2,1);z-index:0}
+.vote-opt span,.vote-opt b{position:relative;z-index:1}
+.vote-opt.win{border-color:var(--pink)}
+.vote-opt.win i{background:var(--pink)}
+.vote-opt.win span,.vote-opt.win b{color:#fff}
+.vote-opt[aria-pressed="true"]{outline:3px solid #ffd23f}
+
+/* ===== 死凶对决 ===== */
+.bt{position:absolute;inset:0;overflow-y:auto;background:#0b0b0d;color:#fff;padding:14px 16px 26px}
+.bt::before{content:"";position:fixed;inset:0;background:repeating-linear-gradient(-45deg,rgba(255,255,255,.035) 0 2px,transparent 2px 16px);pointer-events:none}
+.bt-in{max-width:1180px;margin:0 auto;position:relative}
+.bt-tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:8px;scrollbar-width:thin}
+.bt-tabs button{flex:none;border:2px solid #fff;background:transparent;color:#fff;font-weight:900;font-size:14px;padding:4px 12px;cursor:pointer}
+.bt-tabs button[aria-current="true"]{background:var(--pink);border-color:var(--pink)}
+.rail{display:flex;gap:4px;margin-bottom:12px;flex-wrap:wrap}
+.rail span{font-size:13px;font-weight:900;padding:4px 14px 4px 12px;background:#1d1d22;color:#8d8d95;clip-path:polygon(0 0,calc(100% - 9px) 0,100% 50%,calc(100% - 9px) 100%,0 100%,9px 50%)}
+.rail span.on{background:var(--pink);color:#fff}
+.rail span.past{background:#34343b;color:#e2e2e6}
+.arena{display:grid;grid-template-columns:minmax(0,1fr) minmax(250px,.8fr) minmax(0,1fr);gap:14px;align-items:stretch}
+.ft{background:#fff;color:#000;border:4px solid #000;position:relative;display:flex;flex-direction:column;transition:filter .5s}
+.ft.a{box-shadow:8px 8px 0 var(--pink)}
+.ft.b{box-shadow:-8px 8px 0 #3d7bff}
+.ft-h{display:flex;align-items:center;gap:8px;background:#000;color:#fff;padding:6px 10px}
+.ft-h .rl{font-size:12px;font-weight:900;background:var(--pink);padding:0 8px}
+.ft.b .ft-h .rl{background:#3d7bff}
+.ft-h b{font-size:20px;font-weight:900}
+.ft-mid{display:flex;gap:10px;align-items:center;padding:10px}
+.sil{width:62px;height:62px;border-radius:50%;background:var(--c);color:#fff;font-size:26px;font-weight:900;display:flex;align-items:center;justify-content:center;border:4px solid #000;flex:none}
+.stc{display:flex;flex-wrap:wrap;gap:4px}
+.stc span{font-size:12px;font-weight:900;border:2px solid #000;padding:0 6px;background:#fff}
+.stc span.p{background:var(--pink);color:#fff;border-color:var(--pink)}
+.stc span.k{background:#000;color:#fff}
+.sl3{display:grid;grid-template-columns:repeat(3,1fr);border-top:3px solid #000;border-bottom:3px solid #000}
+.sl{padding:8px 8px 6px;border-right:2px solid #ccc;position:relative;min-height:92px;display:flex;flex-direction:column}
+.sl:last-child{border-right:0}
+.sl span{font-size:12px;font-weight:900;color:#666}
+.sl i{font-style:normal;font-size:14px;font-weight:700;line-height:1.3;flex:1;word-break:break-all}
+.sl b{font-size:34px;font-weight:900;line-height:1;align-self:flex-end}
+.sl.off b{color:#bbb}
+.sl.off em{position:absolute;left:6px;bottom:6px;font-style:normal;font-size:11px;font-weight:900;background:#000;color:#fff;padding:0 5px}
+.sl.hide i,.sl.hide b{visibility:hidden}
+.sl.chg{animation:slotIn .5s cubic-bezier(.2,1.4,.3,1) both}
+@keyframes slotIn{0%{background:var(--pink);transform:scale(.9)}100%{background:#fff;transform:none}}
+.tot{display:flex;justify-content:space-between;align-items:baseline;padding:6px 10px;border-bottom:3px solid #000}
+.tot span{font-weight:900;font-size:14px}
+.tot b{font-size:38px;font-weight:900;line-height:1}
+.gate{padding:8px 10px 10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.gate span{font-weight:900;font-size:14px}
+.gate .pips i{width:24px;height:24px}
+.gate b{margin-left:auto;font-size:38px;font-weight:900;line-height:1;color:var(--pink)}
+.gate .pips i.crack{animation:crack .6s both}
+@keyframes crack{0%{background:var(--pink);transform:skewX(-12deg)}40%{transform:skewX(-12deg) translateY(-6px) rotate(12deg)}100%{background:transparent;border-style:dashed;transform:skewX(-12deg)}}
+.ft.dead{filter:grayscale(1) brightness(.85)}
+.ft .dead-st{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%) rotate(-12deg);font-size:46px;font-weight:900;color:#fff;background:var(--pink);padding:0 20px;border:5px solid #000;z-index:3;white-space:nowrap}
+.ft.dead .dead-st{filter:none}
+.mid{background:#141418;border:3px solid #2b2b31;padding:12px;display:flex;flex-direction:column;gap:10px;align-items:stretch}
+.rd{text-align:center;font-weight:900;font-size:16px}
+.rd span{margin-left:8px;font-size:12px;background:#ffd23f;color:#000;padding:1px 6px}
+.adv-l{display:flex;justify-content:space-between;font-size:12px;font-weight:900;color:#aaa}
+.adv-bar{position:relative;height:18px;background:#2a2a30;border:2px solid #fff}
+.adv-bar::after{content:"";position:absolute;left:50%;top:-5px;bottom:-5px;width:3px;background:#fff}
+.adv-bar i{position:absolute;top:0;bottom:0;background:var(--pink);transition:left .6s,width .6s}
+.adv-n{text-align:center;font-weight:900;font-size:15px}
+.adv-n b{font-size:40px;color:var(--pink);display:block;line-height:1.05}
+.dice{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
+.dz{display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px;border:2px solid #444;min-width:84px}
+.dz.win{border-color:var(--pink);background:rgba(240,22,125,.18)}
+.dz small{font-size:11px;font-weight:900;color:#bbb}
+.dz .dd{display:flex;gap:4px}
+.die{width:34px;height:34px;background:#fff;color:#000;font-weight:900;display:flex;align-items:center;justify-content:center;font-size:17px;border:2px solid #000}
+.die.d4{width:26px;height:26px;font-size:13px;background:#ffd23f}
+.dz b{font-size:26px;font-weight:900;line-height:1}
+.rolling .die{animation:roll .12s linear infinite}
+.rolling b{visibility:hidden}
+@keyframes roll{0%{transform:rotate(0)}50%{transform:rotate(12deg) translateY(-3px)}100%{transform:rotate(0)}}
+.dvs{font-weight:900;color:#aaa}
+.ck{font-size:14px;font-weight:700;border-left:5px solid #555;padding:4px 8px;background:#1d1d22}
+.ck b{float:right;font-weight:900}
+.ck.hit{border-color:var(--pink);background:rgba(240,22,125,.2)}
+.ck.hit b{color:var(--pink)}
+.vd{align-self:center;font-size:34px;font-weight:900;color:#fff;background:var(--pink);padding:0 18px;transform:rotate(-5deg);border:4px solid #fff}
+.vd.soft{background:#000;border-color:#ffd23f;color:#ffd23f}
+.extra{margin-top:14px;background:#fff;color:#000;border:4px solid #000;padding:14px 16px}
+.extra .h3::before{background:var(--pink)}
+.tln{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:6px}
+.tln span{border:3px solid #000;padding:8px 10px;font-weight:900;font-size:14px;position:relative;background:#f2f2f4}
+.tln span.on{background:var(--pink);color:#fff;border-color:var(--pink)}
+.tln span small{display:block;font-size:12px;font-weight:700}
+.trace-t{width:100%;border-collapse:collapse;font-size:15px}
+.trace-t td,.trace-t th{border:2px solid #000;padding:6px 10px;text-align:left}
+.trace-t th{background:#000;color:#fff}
+.trace-t tr.on td{background:var(--pink-soft);font-weight:900}
+.links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.links div{display:flex;align-items:center;gap:8px;border:3px solid #000;padding:6px 10px;font-size:14px;font-weight:700}
+.links div b{background:#000;color:#fff;padding:0 6px;white-space:nowrap}
+.links div em{font-style:normal;color:var(--pink);font-weight:900}
+.mini-stage{position:relative;height:440px;background:#0d0d10;border:3px solid #000;overflow:hidden;margin-bottom:10px}
+.mini-stage::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(-45deg,rgba(255,255,255,.04) 0 2px,transparent 2px 16px)}
+.mini-stage .front{left:14px;right:300px;top:14px;bottom:14px;width:auto;transform:none;box-shadow:6px 6px 0 var(--pink)}
+.mini-stage .back{right:14px;bottom:14px;top:14px;width:274px;height:auto}
+@media (max-width:860px){.mini-stage{height:560px}.mini-stage .front{right:14px;bottom:200px}.mini-stage .back{left:14px;right:14px;top:auto;height:186px;width:auto}}
+.xchat{display:flex;flex-direction:column;gap:6px}
+.xc{display:flex;gap:8px;align-items:flex-start;border:3px solid #000;padding:6px 10px;background:#fff}
+.xc span{font-size:12px;font-weight:900;background:#000;color:#fff;padding:1px 8px;white-space:nowrap;flex:none}
+.xc p{margin:0;font-size:15px;line-height:1.55}
+.xc.gm span{background:#000}
+.xc.pc span{background:#3d7bff}
+.xc.me{border-color:var(--pink)}
+.xc.me span{background:var(--pink)}
+.gauge{height:26px;border:3px solid #000;background:#eee;position:relative;margin:8px 0}
+.gauge i{position:absolute;left:0;top:0;bottom:0;background:#3d7bff;animation:gg 1.4s cubic-bezier(.2,.8,.2,1) both}
+@keyframes gg{from{width:0}to{width:100%}}
+.gauge span{position:absolute;right:8px;top:0;font-weight:900;font-size:13px;line-height:20px}
+.water{position:absolute;inset:0;background:linear-gradient(180deg,rgba(61,123,255,0),rgba(61,123,255,.28));pointer-events:none;z-index:2}
+.sbx{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.sbx-side h4{margin:0 0 6px;font-size:16px;font-weight:900}
+.sbx-row{display:flex;align-items:center;justify-content:space-between;gap:8px;border-bottom:2px solid #ddd;padding:5px 0;font-size:14px;font-weight:900;flex-wrap:wrap}
+.sbx-row .seg-sw button{padding:2px 10px;min-height:32px;font-size:13px}
+.sbx-row .seg-sw{border-width:2px}
+.sbx-row .seg-sw button{border-right-width:2px}
+.sbx-act{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.sbx-log{margin-top:10px;font-size:14px;max-height:140px;overflow:auto;border:2px solid #000;padding:6px 10px;background:#f6f6f8}
+.sbx-log p{margin:2px 0}
+
+/* ===== 附录 ===== */
+.apx-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.apx-tabs button{border:3px solid var(--ink);background:var(--paper);font-weight:900;padding:6px 16px;cursor:pointer}
+.apx-tabs button[aria-pressed="true"]{background:var(--ink);color:var(--on-ink)}
+.tbl{width:100%;border-collapse:collapse;background:var(--paper);border:3px solid var(--ink)}
+.tbl th,.tbl td{border-bottom:2px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top;font-size:15px}
+.tbl th{background:var(--ink);color:var(--on-ink);font-weight:900}
+.tbl td.n{font-weight:900;color:var(--pink);white-space:nowrap}
+.tbl td.k{font-weight:900;white-space:nowrap}
+.tblwrap{overflow-x:auto}
+.apx-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+
+/* ===== 响应式 ===== */
+@media (max-width:1200px){
+  .front{left:16px;right:352px;width:auto;transform:none}
+  .back{width:320px;height:calc(100% - 32px);top:16px;bottom:16px}
+}
+@media (max-width:860px){
+  .two,.three,.truths,.itemtags{grid-template-columns:1fr}
+  .itemtags{grid-template-columns:repeat(3,1fr)}
+  .arena{grid-template-columns:1fr 1fr}
+  .mid{grid-column:1/-1;order:3}
+  .sbx{grid-template-columns:1fr}
+  .front{left:10px;right:10px;top:10px;bottom:58px}
+  .back{left:10px;right:10px;width:auto;top:auto;bottom:10px;height:42px;overflow:hidden;transition:height .3s}
+  .back.open{height:62%}
+  .back-tg{display:inline-block}
+  .map{grid-template-columns:1fr}
+  .why{grid-template-columns:1fr 1fr}
+  .studio{grid-template-columns:1fr}
+  .bond-row{grid-template-columns:1fr}
+  .tln{grid-template-columns:1fr 1fr}
+  .links{grid-template-columns:1fr}
+}
+@media (max-width:640px){
+  .dock{flex-direction:column}
+  .ctrl{border-left:0;border-top:3px solid var(--ink);flex-direction:row;justify-content:space-between;align-items:center}
+  .stepbar{display:none}
+  .caption{font-size:15px;max-height:22vh;padding:10px 14px}
+  .bar-kick{display:none}
+  .menu-btn{padding:0 22px 0 12px}
+  .page{padding:18px 14px 40px}
+  .tc-grid{grid-template-columns:1fr}
+  .arena{grid-template-columns:1fr}
+  .dot{width:42px;height:42px}
+  .at-big b{font-size:56px}
+  .itemtags{grid-template-columns:1fr 1fr}
+  .cover-band{padding:24px 20px}
+  .theme-btn{display:none}
+  .mode-sw button{padding:4px 9px;font-size:12px}
+}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <header class="bar">
+    <button type="button" class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="menu">目录</button>
+    <div class="bar-title"><span class="bar-kick" id="segKick">序章</span><b id="segTitle">弹丸论破跑团规则书</b></div>
+    <button type="button" class="theme-btn" id="themeBtn" aria-label="切换深浅色">深浅色</button>
+    <div class="bar-prog" id="prog">1 / 1</div>
+  </header>
+  <nav class="menu" id="menu" aria-label="目录"></nav>
+  <main class="scene" id="scene"></main>
+  <footer class="dock">
+    <div class="caption" id="caption" aria-live="polite"></div>
+    <div class="ctrl">
+      <div class="ctrl-row">
+        <button type="button" class="cbtn" id="prevBtn">上一步</button>
+        <button type="button" class="cbtn primary" id="nextBtn">下一步</button>
+      </div>
+      <div class="ctrl-row">
+        <button type="button" class="cbtn small" id="rulesBtn" aria-expanded="false" aria-controls="drawer">细则</button>
+        <div class="stepbar" id="stepbar" aria-hidden="true"></div>
+      </div>
+    </div>
+  </footer>
+  <aside class="drawer" id="drawer" aria-label="细则">
+    <header><b id="drawerTitle">细则</b><button type="button" id="drawerClose">关闭</button></header>
+    <div class="drawer-body" id="drawerBody"></div>
+  </aside>
+  <div class="scrim" id="scrim" hidden></div>
+  <div class="wipe" id="wipe" aria-hidden="true"><i class="w1"></i><i class="w2"></i><i class="w3"></i><div class="wipe-t"><small id="wipeKick"></small><b id="wipeTitle"></b></div></div>
+</div>
+<script>
+(function(){
+"use strict";
+/* ===== 共用 ===== */
+const $=(s,r=document)=>r.querySelector(s);
+const $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+const esc=v=>String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const T=(t,c='')=>`<span class="tag ${c}"><span>${t}</span></span>`;
+const D=ms=>`style="--d:${ms}ms"`;
+const sg=n=>(n>0?'+':n<0?'−':'')+Math.abs(n);
+
+const PC={
+  shiori:{n:'朝雾诗织',s:'诗',c:'#f0167d'},
+  moe:{n:'早乙女萌',s:'萌',c:'#d98a00'},
+  kujo:{n:'九条刚',s:'九',c:'#3553d6'},
+  hide:{n:'森秀人',s:'森',c:'#15936c'},
+  yuki:{n:'柊由纪',s:'柊',c:'#8a4fd8'}
+};
+const CARDS={
+  moe:{title:'超高校级的偶像',tags:['歌唱','舞台表现','读空气'],lim:'嗓子哑掉时无法发动'},
+  kujo:{title:'超高校级的剑道家',tags:['剑术','心眼','体能'],battle:'剑术',lim:'手里没有长条物时，【剑术】无法发动'},
+  hide:{title:'超高校级的钢琴家',tags:['演奏','绝对音感','指力'],lim:'双手受伤时无法发动'},
+  yuki:{title:'超高校级的药剂师',tags:['药理','调剂','急救'],lim:'手边没有药品或器材时无法发动'}
+};
+const gm=x=>({t:'gm',x}), sys=x=>({t:'sys',x}), me=x=>({t:'me',x}), pc=(k,x)=>({t:'pc',k,x}),
+      note=x=>({t:'note',x}), card=k=>({t:'card',k}), stamp=(x,c='')=>({t:'stamp',x,c}), bullet=(x,by)=>({t:'bullet',x,by}),
+      hid=(k,x)=>({t:'hide',k,x});
+
+/* ===== 开场 ===== */
+const HIST=[
+  ['一开始它是 PVP','凶手面对的是与其他所有玩家的案件比拼，敢下手的凶手都是抱着要赢的态度来的。于是出现特别冷门的物理学知识、特别绕的诡计逻辑，而主持人没有办法在双方之间做平衡。'],
+  ['第一次改革：转向 PVE','凶手设计一个案件去挑战所有人，重点在演出叙事，塑造凶手与侦探的弧光。'],
+  ['新问题：没有人愿意当凶手','因为不管当死者还是当凶手，最后都要面对同一件事：本章节淘汰。'],
+  ['于是提高凶手待遇、降低死者体验','自愿当凶手就有特权：不会被其他凶手杀、有更多剧情体验、有专门设计的地图环境。为了让案件顺利进行，主持人甚至只能用黑箱去满足案件的要求。'],
+  ['最糟的情况：凶手的话语权大于主持人','最早的时候，弹丸论破 TRPG 对死者的态度是无奈但尊重的，特别是第一章死者，没有游戏体验，纯粹一轮游。而凶手的话语权被放大之后，已经到了想杀谁就杀谁、就算牵扯私人恩怨也可以的程度。有能力的主持人可以从中把控平衡，但只要主持人稍微偏差，就会出现场外纠纷，甚至引发连锁反应。']
+];
+const S_INTRO={id:'intro',type:'page',kick:'序章',title:'开场',
+rules:[['参与须知',[
+  '这是一场关于杀人、背叛与死亡的游戏。角色可能成为死者或凶手，死亡的玩家在大部分的场合，是退出本局游戏。',
+  '特别是首位死者，可能只有很短的参与时间，参团前请确认自己能接受这种机制。',
+  '主持人可以调度剧情、资源与情报等任何资源，以确保团的稳定性。',
+  '本规则中仅有【死凶对抗】的裁定会高于主持人。',
+  '弹丸论破 TRPG，失忆与揭露世界观真相是常态，因此玩家写下的背景，可能由主持人补完、合并，甚至在故事中揭露玩家不知道的记忆，请确定自己可以接受这种模式。',
+  '凶手依案件与角色动机来选择目标，请不要借游戏处理场外的私人恩怨。',
+  '出现争议时，由主持人裁定；仅有死凶对抗规则，严格按照裁定处理。']]],
+steps:[
+{cap:'这是一份边看边玩的规则书：跟着一场案件，从创角一路走到学级裁判与死凶对决。点<b>「下一步」</b>前进，左上角<b>「目录」</b>可以跳到任何一段。这是<b>完整版（主持人手册）</b>：标着「主持人」的步骤是操作说明，玩家只想知道怎么玩的话，看另一份玩家手册就够了。',
+ view:()=>`<div class="cover"><div class="cover-band rv"><small>超高校级才能者</small><h1>弹丸论破跑团规则书</h1><p>自相残杀学园　叙事型标签规则</p></div><div class="cover-hint rv" ${D(350)}>按「下一步」，或按键盘 → 开始</div></div>`},
+{cap:'弹丸论破 TRPG 跟一般的跑团不一样。',
+ view:()=>`<div class="pg narrow center"><span class="kick rv"><span>制作者前言</span></span>
+ <p class="big rv" ${D(80)}>如果你是因为喜欢弹丸论破才翻开这本书，我要先把丑话说在前面：</p>
+ <div class="slam stampin" ${D(420)}>这个团跑起来非常痛苦。</div>
+ <div class="duo rv" ${D(760)}><div class="duo-x"><s>数值型</s><b>叙事型</b></div><div class="duo-x"><s>PVP</s><b>PVE</b></div></div>
+ <div class="prose rv" ${D(950)}><p>它不是 PVP 数值型的 TRPG，相反，弹丸 TRPG 是 <b>PVE 叙事型</b>。最常见的误解，是把它当成一个十二至十六人的 PVP 版 CoC，这是极度错误的理解，<b>为此有大量的新人主持人在此踩坑</b>。</p></div></div>`},
+{cap:'两个根本问题：骰子会毁掉推理，案件又无法复制。',
+ view:()=>`<div class="pg two"><div class="box rv"><h3 class="h3">为什么骰子在这里不管用</h3><div class="prose"><p>推理对抗走的是金田一式的本格推理。本格推理的前提是线索完整呈现，玩家才有推理的立场。带有 PVP 性质的线索隐瞒、用掷骰决定查不查得到东西，在这个框架下是不可行的。</p><p>确实有主持人认真细心到可以把骰子调查跑好，但那不具备可推广性。<b>一套需要主持人天赋才能运转的规则，不是规则。</b></p></div></div>
+ <div class="box rv" ${D(260)}><h3 class="h3">为什么案件不能复制</h3><div class="prose"><p>到目前为止，弹丸论破 TRPG 不存在可模块化、可重复使用的案件结构。</p><p>案件是由凶手与主持人互相讨论生出来的。玩家不同、才能不同，都会让整件事指数化地进入混沌，游戏的稳定性几乎完全依赖主持人的个人能力。</p><p>十六个 PC 的才能，基本上等于十六套房规；每个凶手制定的案件逻辑完全不同，也约等于没有推理、全都是房规。再加上主线靠案件推动、死者淘汰于游戏之外的底层逻辑，弹丸论破 TRPG 几乎等同于一个由大量房规硬套出来的口胡团。</p></div></div></div>`},
+{cap:'我们是怎么走到这一步的。',
+ view:()=>`<div class="pg narrow"><h2 class="h-tab rv"><span>我们是怎么走到这一步的</span></h2><div class="tl">${HIST.map((h,i)=>`<div class="tl-i rv ${i===4?'worst':''}" ${D(150+i*330)}><b>${h[0]}</b><p>${h[1]}</p></div>`).join('')}</div></div>`},
+{cap:'这本新规要做的三件事，以及它写给谁。',
+ view:()=>`<div class="pg"><h2 class="h-tab rv"><span>这本新规要做的三件事</span></h2><div class="three">
+ ${['用制式化的跑团规矩，减轻主持人与玩家的跑团压力，特别是减缓新手主持人的开团压力。','用准确的规则裁定，平衡主持人、凶手、死者之间的关系，并且要有白纸黑字的公平规则。','解决并分享：把这么久的跑团经历里时常面临的痛点，做出解决与优化。'].map((t,i)=>`<div class="goal pop" ${D(200+i*260)}><em>${i+1}</em><p>${t}</p></div>`).join('')}</div>
+ <div class="box rv" ${D(1000)} style="margin-top:22px"><h3 class="h3">这本书写给谁</h3><div class="prose"><p>写给单纯一腔热血喜欢弹丸论破、想一脚踏进弹丸 TRPG 的新手主持人。这是一份避雷指南，也是一份新手指引。</p><p>同时也写给喜欢扮演才能者的玩家，让你知道该怎么更愉快地游玩。</p></div></div></div>`},
+{cap:'这本书里只有一个地方是绝对公平的，那就是死凶对抗。',
+ view:()=>`<div class="pg narrow center"><p class="big rv">弹丸论破 TRPG 的主持人应该理解一句话：</p><div class="slam huge stampin" ${D(380)}>公平是最大的不公平。</div>
+ <div class="bb rv" ${D(850)}><div class="bb-fair"><b>死凶对抗</b><span>绝对公平</span></div><div class="bb-black"><b>其余全部</b><span>黑箱</span></div></div>
+ <div class="prose rv" ${D(1050)}><p>如果试图让每一个环节都公平，得到的会是：凶手必须赢才划算、死者被当成消耗品，而主持人为了维持表面上的平等，失去了调控的余地。真正的平衡，需要主持人有意识地不公平；而正因为其余都是黑箱，那唯一一处的公平才有重量。</p><p>感谢测试团的参与者们。</p></div></div>`},
+{cap:'核心规则：<b>死凶对抗的结果高于一切。</b>',
+ view:()=>`<div class="pg narrow"><h2 class="h-tab rv"><span>核心规则</span></h2><div class="box rv" ${D(150)}><div class="prose">
+ <p>本规则书最重要的规则是死凶对抗。弹丸论破 TRPG 的绝大多数流程都交由主持人裁量，唯独<b>行凶致死的那一瞬间</b>，必须严格依照对双方公平的方式处理。</p>
+ <p>过去的自相残杀游戏里，死者没有保护自己的手段。无论做了多少防备，只要案件需要，他就会死；凶手可以花上数日设计精巧的密室，却用一把刀草率地了结对方的性命。</p>
+ <p>死凶对抗要求凶手付出代价：不花费心血，就杀不死对方，甚至可能被反杀。这是凶手必须给死者的尊重，也是主持人手中唯一一把不会偏移的尺。</p></div></div>
+ <div class="pg center" style="margin-top:24px"><div class="slam stampin" ${D(700)}>主持人可以在任何环节为凶手铺路，唯独这一刻不行。</div></div></div>`},
+{cap:'无论场所在哪里，这三件事永远成立。',
+ view:()=>`<div class="pg"><p class="big rv">当你睁开眼睛，门已经从外面锁上了。广播宣告了唯一的出路：想要离开这里，就杀死你的同伴，并且不被任何人识破。</p>
+ <div class="truths">${[['你出不去。','门是锁着的，通讯是断的，外面的世界对这里发生的一切一无所知。'],['你可以出去。','只要杀死一个人，并且让所有人都认不出你是凶手。'],['审判必然到来。','尸体被发现之后，幸存者将被召集起来找出凶手。指认正确，凶手独自受罚；指认错误，其余所有人陪葬。']].map((x,i)=>`<div class="truth stampin" ${D(350+i*380)}><b>${x[0]}</b><p>${x[1]}</p></div>`).join('')}</div>
+ <p class="mini rv" ${D(1600)}>场所、黑幕形象、动机与校规由主持人设定。场所不必是学校，主导者也不必是黑白熊。</p></div>`},
+{cap:'每一章都照这个顺序走。接下来先<b>创角</b>，然后跟着一场案件把整章跑一遍。',
+ view:()=>`<div class="pg"><h2 class="h-tab rv"><span>一章怎么进行</span></h2>
+ <div class="chev">${['自我介绍','日常','尸体发现','搜查','学级裁判','结案','幕间'].map((x,i)=>`<span class="pop ${i===4?'hot':''}" ${D(150+i*140)}>${x}</span>`).join('')}</div>
+ <div class="two"><div class="box rv" ${D(1150)}><h3 class="h3">参与须知</h3><ul class="pts">
+ <li>你扮演的角色，随时都可能成为死者或凶手，<b>而不论死者或凶手，都将在死亡后出局</b>。</li>
+ <li>除了死凶对抗，本规则几乎不使用任何数值判定：你遭遇什么、发现什么、死于何时，都由主持人决定玩法。</li>
+ <li><b>死凶对决的裁定高于一切</b>，它的设计本意就是保护参加弹丸 TRPG 的所有人。</li></ul></div>
+ <div class="box rv" ${D(1300)}><h3 class="h3">你也可能成为凶手</h3><ul class="pts">
+ <li>不管是自愿、被动、反杀，<b>即使你不愿意，也有可能被迫成为凶手</b>。</li>
+ <li>凶手玩家需要与主持人一起设计一个足够精彩的案件，让所有人挑战，然后华丽地落幕。</li>
+ <li>正常来说，每个玩家的<b>负面羁绊标签会成为角色的杀人动机</b>；但有杀人动机，不等于玩家就会有强烈的杀人欲望。</li>
+ <li>主持人会尽量给各位玩家杀人的场合与动机；实在没有玩家意愿的情况下，<b>主持人就将只用强制手段</b>。</li></ul></div></div></div>`},
+{gm:true,cap:'开团前，这些事一定要先跟玩家讲清楚，报名之后才不会有争议。',
+ view:()=>`<div class="pg two"><div class="box rv"><h3 class="h3">开团前要宣达的事</h3><ul class="pts">
+ <li>死亡会<b>退出本局</b>，首位死者可能只玩很短的时间。</li>
+ <li>主持人可以调度剧情、资源与情报，<b>只有死凶对抗的裁定高于主持人</b>。</li>
+ <li>失忆与揭露世界观真相是常态，<b>背景可能被补完、合并或改写</b>。</li>
+ <li>凶手依案件与角色动机选目标，<b>不处理场外恩怨</b>。</li>
+ <li>争议由主持人裁定；死凶对抗严格照规则走。</li></ul></div>
+ <div class="box rv" ${D(220)}><h3 class="h3">收卡前先挡掉的人</h3><ul class="pts">
+ <li>只想用<b>个人 OC</b>、不接受角色被魔改的人。</li>
+ <li>只想搞事、<b>却不作任何计划</b>的人。</li>
+ <li>提醒他们：主持人没有义务特别对待 OC 卡，更别提只在脑海里、卡上没写的设定。</li></ul></div></div>`},
+{cap:'最后两件事，请在报名前确认。',
+ view:()=>`<div class="pg two"><div class="box rv" style="border-color:var(--pink)"><h3 class="h3">不推荐这两种人参加</h3><div class="prose">
+ <p><b>使用个人 OC 的人</b>，以及<b>充满强烈搞事欲望、却不作任何计划的人</b>。</p>
+ <p>弹丸团很残酷，任何角色都随时可能会死、遭受对待，又或者被魔改。对于一个标准团来说，<b>主持人没有义务特别对待你的 OC 卡</b>，更别提是你人物卡没写、只在脑海里面的设定。如果不能接受，请不要参加弹丸论破 TRPG。</p></div></div>
+ <div class="box rv" ${D(260)}><h3 class="h3">想当搞事役的话</h3><div class="prose">
+ <p>我知道喜欢弹丸的玩家，肯定会有希望能当一个充满魅力的搞事役。</p>
+ <p>特别提醒：<b>不要小看任何一个玩家</b>。没有任何充分计划与准备的搞事，你不会得到想要的表演，<b>反而只会成为别人的垫脚石</b>。</p></div></div></div>`}
+]};
+
+/* ===== 才能 ===== */
+const SHIORI_POS=[{t:'嗅觉鉴定',d:'分辨气味的来源与成分。'},{t:'调配',d:'调制香料、复刻气味。'},{t:'香气记忆',d:'记得闻过的每一种气味。'}];
+const LIM_A='要贴近气味来源（一步以内），才能发动【嗅觉鉴定】';
+const LIM_B='鼻塞，或身处浓烈异味中时，无法发动才能';
+function tcard(o){
+  const pos=[0,1,2].map(i=>{
+    const p=o.pos[i], on=i<o.show;
+    if(!on) return `<div class="tc-slot"><small>正向才能 ${i+1}</small></div>`;
+    return `<div class="tc-slot on ${p.battle?'battle':''} ${o.flip?'flip':''}" ${D(180+i*300)}><small>正向才能 ${i+1}</small><b>【${p.t}】</b><p>${p.d}</p>${p.battle?`<span class="mark">${T('战斗')}</span>`:''}</div>`;
+  }).join('');
+  const lim=o.lim?`<div class="tc-lim ${o.flipLim?'flip':''}" ${D(200)}><small>限制条件</small><b id="limText">${o.lim}</b></div>`:`<div class="tc-lim empty"><small>限制条件</small></div>`;
+  return `<div class="tc rv"><span class="tag big"><span>${o.title}</span></span><div class="tc-name">${o.name}</div><div class="tc-grid">${pos}</div>${lim}</div>`;
+}
+const S_TALENT={id:'talent',type:'page',kick:'创角 1',title:'才能',
+rules:[
+ ['才能',['才能是公开信息，但才能如何使用，要看玩家自己如何制定才能标签。','每个才能需要有三个正向才能标签＋一个负面才能标签。玩家不需要详细明确说出自己才能的使用方法与作用原理，只需要写上标签；在 RP 的场合，合理使用与标签符合情况的扮演，就算是有效扮演。','负面标签则是才能的限制与缺陷，基本上填写「需要某个前提才能使用才能」，又或者「出现某种情况没办法使用才能」两种方向。']],
+ ['正向才能',['是一个才能可以做到的三种不同方向的事情。不要将宝贵的才能标签用在重复的方向，因为规则面对同类项标签生效的时候，只会取一个生效。','才能原则上不更换，除非剧情发生足以改变才能的事件，比如假才能或隐藏才能，这让主持人判断。']],
+ ['使用标签',['正常人做得到的事不需要标签，主持人照常给结果。','同一个动作，有对应标签的人能实际改变场景，或取得更深一层的情报。','使用时说明：用哪个标签、想做什么、怎么做。']],
+ ['特殊才能标签',['【预判】：在受到偷袭的时候，可以在第一轮使用武器对抗。此为唯一用途，无法做其他使用。','【制作】：可以将两个带标签的道具，合成为双标签的道具，但需材料与时间。此为唯一用途，无法做其他使用。']],
+ ['战斗才能',['可以对特定的才能标签进行标记，被标记为战斗的才能，在死凶对决的判定中可以使用。','死凶对决采用同类项合并的判定，所以多个战斗才能标签，也只能使用一个。','在日常 RP 使用战斗才能标签的时候，如果有人询问主持人，会得到「这是一个战斗才能」的提示。','如果战斗才能在死凶对决中生效，必定在现场留下指向你的痕迹。']],
+ ['运气类才能',['只能选择一个正向才能标签与一个对等的负面标签。','被杀害时可以当一次性的对抗用途，行凶时没有加成，具体使用由主持人审核。','禁止「超高校级的奇迹」这类才能作为选择，这才能曾经毁掉两个团。']]
+],
+steps:[
+{cap:'<b>称号是身份，标签才是能力。</b>主持人判断你做不做得到一件事，看的是你有没有对应的标签，而不是称号听起来像不像办得到。',
+ view:()=>`<div class="pg two"><div>${tcard({title:'超高校级的调香师',name:'朝雾 诗织',pos:SHIORI_POS,show:0})}</div>
+ <div><h2 class="h-tab rv"><span>才能</span></h2><p class="lead rv" ${D(120)}>每个才能需要：</p>
+ <div class="rv" ${D(260)} style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px">${T('三个正向才能标签','big')}${T('一个负面才能标签','big dark')}</div>
+ <ul class="pts rv" ${D(420)}><li>才能是<b>公开信息</b>，但才能<b>如何使用</b>，要看玩家自己怎么制定标签。</li><li>所谓才能标签，就是<b>这个才能可以做到的、不重复的三个使用方面</b>。</li><li>只要不是极端小众的标签，<b>合理基本上都可以通过</b>：弹丸 TRPG 使用叙事玩法，不会强求你把才能的使用设定得非常具体，这没有必要。</li><li>RP 时，只要扮演合理、符合标签的情况，就算是有效扮演。</li></ul></div></div>`},
+{cap:'<b>三个正向才能</b>尽量涵盖不同用途。三个意思相近的名字，不如三种不同的本事。',
+ view:()=>`<div class="pg two"><div>${tcard({title:'超高校级的调香师',name:'朝雾 诗织',pos:SHIORI_POS,show:3,flip:true})}</div>
+ <div><h2 class="h-tab rv"><span>正向才能</span></h2><ul class="pts rv" ${D(900)}>
+ <li>写的是这个才能<b>可以做到的三种不同方向</b>的事情。</li>
+ <li>不要把宝贵的标签用在重复的方向：规则面对<b>同类项标签</b>时，只会取一个生效。</li>
+ <li>才能原则上不更换，除非剧情发生足以改变才能的事件，比如假才能或隐藏才能，这让主持人判断。</li></ul></div></div>`},
+{cap:'负向才能就是<b>限制条件</b>：写清楚「需要什么才能发动」，或「出现什么情况就不能发动」。点右边两种写法切换。',
+ view:()=>`<div class="pg two"><div>${tcard({title:'超高校级的调香师',name:'朝雾 诗织',pos:SHIORI_POS,show:3,lim:LIM_B,flipLim:true})}</div>
+ <div><h2 class="h-tab rv"><span>负面才能标签</span></h2><p class="lead rv" ${D(100)}>负面标签是<b>才能的限制与缺陷</b>，两种写法：</p><div class="form rv" ${D(150)}>
+ <button type="button" class="form-x" data-form="a" data-ex="${LIM_A}" aria-pressed="false">需要 <code>某个条件</code> 才能发动</button>
+ <button type="button" class="form-x" data-form="b" data-ex="${LIM_B}" aria-pressed="true">出现 <code>某种情况</code> 就不能发动</button></div>
+ <ul class="pts rv" ${D(350)} style="margin-top:14px"><li>必须能在<b>具体情境</b>造成限制；「太过善良」这类只描述性格的内容不算。</li><li>限制条件成立时，死凶对决中<b>才能格无法使用</b>。</li><li>你的限制条件，也可能成为别人杀死你的工具。</li></ul></div></div>`,
+ bind:root=>{ $$('[data-form]',root).forEach(b=>b.addEventListener('click',()=>{ $$('[data-form]',root).forEach(x=>x.setAttribute('aria-pressed',String(x===b))); const t=$('#limText',root); t.textContent=b.dataset.ex; const box=t.parentElement; box.classList.remove('flip'); void box.offsetWidth; box.classList.add('flip'); })); }},
+{cap:'<b>标签是改变场景的许可，不是行动的许可。</b>任何人都能闻一闻茶杯，但只有带标签的人能闻出更深一层的东西。',
+ view:()=>`<div class="pg narrow"><h2 class="h-tab rv"><span>怎么使用标签</span></h2>
+ <div class="act rv" ${D(150)}><span class="step">用哪个标签</span><span class="arrow">→</span><span class="step">想做什么</span><span class="arrow">→</span><span class="step">怎么做</span><span class="arrow">→</span><span class="step" style="background:#000;color:#fff">主持人裁定结果与痕迹</span></div>
+ <p class="lead rv" ${D(400)}>同一个动作：拿起茶杯闻一闻。</p>
+ <div class="cmp"><div class="rv" ${D(600)}><small>没有标签</small><p>闻起来是红茶的味道。</p></div><div class="rv" ${D(1100)}><small>【嗅觉鉴定】</small><p>红茶里混着极淡的<b>樟脑味</b>，像是从仓库带出来的。</p></div></div>
+ <p class="mini rv" ${D(1400)}>搬东西、翻抽屉、撞门这类正常人做得到的事，不需要标签。</p></div>`},
+{cap:'有两种<b>才能限定标签</b>：【预判】和【制作】。它们只执行规定的效果，不能填进才能格，也不能做成道具。',
+ view:()=>`<div class="pg two"><div class="lim-card rv"><div style="display:flex;align-items:center"><span class="icon-x">预</span><b>【预判】</b></div><p>在<b>受到偷袭</b>的时候，可以在<b>第一轮使用武器对抗</b>。</p>
+ <div class="slot3"><div class="hot pop" ${D(500)}><small>凶器（偷袭首轮）</small><b>可用</b></div><div class="lock"><small>才能</small><b>不能填</b></div><div><small>机关</small><b>—</b></div></div>
+ <p class="mini"><b>此为唯一用途，无法做其他使用。</b></p></div>
+ <div class="lim-card rv" ${D(300)}><div style="display:flex;align-items:center"><span class="icon-x">制</span><b>【制作】</b> <span class="gear" style="margin-left:10px"></span></div><p>可以将<b>两个带标签的道具，合成为双标签的道具</b>。</p>
+ <div class="slot3"><div class="pop" ${D(500)}><small>道具 A</small><b>1 标签</b></div><div class="pop" ${D(650)}><small>道具 B</small><b>1 标签</b></div><div class="hot pop" ${D(800)}><small>合成</small><b>双标签</b></div></div>
+ <p class="mini">需要材料与时间。<b>此为唯一用途，无法做其他使用。</b></p></div></div>`},
+{cap:'可以用在死凶对决里的正向才能，要标记<b>「战斗」</b>。点下面的开关看看才能格怎么变化。',
+ view:()=>`<div class="pg two"><div id="btCardWrap"></div><div><h2 class="h-tab rv"><span>战斗才能</span></h2>
+ <div class="toggles rv" ${D(150)}><button type="button" class="btn line" id="tgBattle" aria-pressed="true">标记战斗：开</button><button type="button" class="btn line" id="tgLim" aria-pressed="false">限制条件成立：关</button></div>
+ <div id="btSlot"></div>
+ <ul class="pts rv" ${D(350)} style="margin-top:12px"><li>死凶对决采用<b>同类项合并</b>判定，就算有多个战斗才能，也只能使用一个，计 1。</li><li>在日常 RP 使用战斗才能时，<b>如果有人询问主持人，会得到「这是一个战斗才能」的提示</b>。</li><li>限制条件成立时，<b>才能格无法使用</b>。</li><li>战斗才能在死凶对决中生效，<b>必定在现场留下指向你的痕迹</b>。</li></ul></div></div>`,
+ bind:root=>{
+  const st={battle:true,lim:false};
+  const draw=(fx)=>{
+    $('#btCardWrap',root).innerHTML=tcard({title:'超高校级的剑道家',name:'九条 刚',pos:[{t:'剑术',d:'木刀、竹刀的实战技术。',battle:st.battle},{t:'心眼',d:'看穿对手的呼吸与破绽。'},{t:'体能',d:'耐力与爆发力远超常人。'}],show:3,lim:'手里没有长条物时，【剑术】无法发动'});
+    const v=st.battle&&!st.lim?1:0;
+    $('#btSlot',root).innerHTML=`<div class="slot3"><div><small>凶器</small><b>—</b></div><div class="${v?'hot':'lock'} ${fx?'pop':''}"><small>才能格</small><b>${st.battle?(st.lim?'封锁 0':'【剑术】1'):'不能填'}</b></div><div><small>机关</small><b>—</b></div></div>`;
+    $('#tgBattle',root).textContent='标记战斗：'+(st.battle?'开':'关'); $('#tgBattle',root).setAttribute('aria-pressed',String(st.battle));
+    $('#tgLim',root).textContent='限制条件成立：'+(st.lim?'开':'关'); $('#tgLim',root).setAttribute('aria-pressed',String(st.lim));
+  };
+  draw(false);
+  $('#tgBattle',root).addEventListener('click',()=>{st.battle=!st.battle;draw(true);});
+  $('#tgLim',root).addEventListener('click',()=>{st.lim=!st.lim;draw(true);});
+ }},
+{cap:'<b>运气类才能</b>是例外：一个正向才能配一个对等的限制条件。被杀害时能当一次性的对抗用途，行凶时没有加成。',
+ view:()=>`<div class="pg two"><div class="tc rv"><span class="tag big"><span>超高校级的幸运</span></span><div class="tc-name">运气类</div>
+ <div class="tc-grid" style="grid-template-columns:1fr"><div class="tc-slot on flip" ${D(300)}><small>正向才能</small><b>【幸运】</b><p>被杀害时，可以当一次性的对抗用途。</p></div></div>
+ <div class="tc-lim flip" ${D(650)}><small>对等的限制条件</small><b>行凶时没有任何加成</b></div></div>
+ <div><h2 class="h-tab rv"><span>运气类才能</span></h2><ul class="pts rv" ${D(200)}><li>只能选择<b>一个正向才能标签与一个对等的负面标签</b>。</li><li>被杀害时可以当一次性的对抗用途，行凶时没有加成，具体使用由主持人审核。</li></ul>
+ <div class="box rv" ${D(420)} style="margin-top:14px;border-color:var(--pink)"><h3 class="h3">禁止事项</h3><p class="prose" style="margin:0">禁止「<b>超高校级的奇迹</b>」这类才能作为选择。<br>这才能曾经毁掉两个团。</p></div></div></div>`}
+]};
+/* ===== 属性 ===== */
+const AD={hp:1,frail:false,dex:1,int:2,cha:0,shiny:false,item:0};
+const ANAME={hp:'健康',dex:'灵巧',int:'聪慧',cha:'魅力'};
+function thrOf(){return AD.frail?1:AD.hp<=1?2:AD.hp<=3?3:4;}
+function unlockList(kind){
+  const v=AD[kind];
+  if(kind==='hp') return [
+    ['病弱','健康 −1','门槛 1；自由点 +2；外貌要看起来羸弱。',AD.frail],
+    ['普通体质','健康 0～1','门槛 2。',!AD.frail&&v<=1],
+    ['强壮','健康 2～3','门槛 3；外貌不能写成纤细瘦小。',!AD.frail&&v>=2&&v<=3],
+    ['超级强壮','健康 4','门槛 4；要有明显的肌肉体型。',!AD.frail&&v>=4]];
+  if(kind==='dex') return [
+    ['改造与机关','灵巧 2','改造物品、加入【机关】、合成双标签道具。',v>=2],
+    ['解毒与中毒','灵巧 3','有原料时，制作带【解毒】或【中毒】的物品。',v>=3],
+    ['三标签与枪械','灵巧 4','最多三标签的道具，也可以制作枪械。',v>=4]];
+  if(kind==='int') return [
+    ['逻辑深潜','聪慧 1','消耗一次学裁提问，问言弹之间有没有还没推出的关联。',v>=1],
+    ['观察眼','聪慧 2','搜查时消耗一次学裁提问，标出一个地点描述里的关键词。',v>=2],
+    ['右脑解放','聪慧 3','取得全部言弹、或全部隐藏情报时收到通知。',v>=3],
+    ['闪耀字谜','聪慧 4','自备十六个字提问，主持人从中挑字回答；剧情与学裁每章各一次。',v>=4]];
+  return [
+    ['华丽谢幕','魅力 2','死亡时，必定能在现场留下一个言弹。',v>=2],
+    ['超级无敌美丽','全场唯一最高','须和主持人确认。决定自己死亡时的模样，连绞碎机都破坏不了。',AD.shiny&&v>=2]];
+}
+function demoFor(name){
+  if(name==='逻辑深潜') return `<div class="ab-demo"><span class="ripple"></span> 「【樟脑丸粉末】和【木刀架】之间，有还没推出的关联吗？」→ 是</div>`;
+  if(name==='观察眼') return `<div class="ab-demo">舞台边缘整齐，<span class="eyekw">外套上沾着白色粉末</span>，房间里<span class="eyekw">只有木头的气味</span>。</div>`;
+  if(name==='右脑解放') return `<div class="ab-demo"><span class="ping">通知：言弹已全部取得</span></div>`;
+  if(name==='闪耀字谜') return `<div class="ab-demo"><div class="g16">${'仓库木刀夜里音乐舞台樟脑粉末剑'.split('').map((c,i)=>`<span class="${[0,1,2,3].includes(i)?'sel':''}">${c}</span>`).join('')}</div></div>`;
+  if(name==='改造与机关') return `<div class="ab-demo"><span class="gear"></span></div>`;
+  if(name==='解毒与中毒') return `<div class="ab-demo"><span class="vial"></span> <span class="vial anti"></span></div>`;
+  if(name==='华丽谢幕') return `<div class="ab-demo">死亡现场留下：${T('言弹')}</div>`;
+  return '';
+}
+function sparkHTML(){
+  const pos=[[6,12],[22,70],[40,24],[58,80],[74,14],[88,58],[48,50],[14,88],[92,90],[66,40]];
+  return `<div class="sparkles">${pos.map((p,i)=>`<i style="left:${p[0]}%;top:${p[1]}%;animation-delay:${i*160}ms"></i>`).join('')}</div>`;
+}
+function attrHTML(kind,fx){
+  fx=fx||{fresh:[]};
+  const v=AD[kind], locked=kind==='hp'&&AD.frail;
+  const dots=`<div class="dots">${[1,2,3,4].map(i=>`<button type="button" class="dot ${!locked&&v>=i?'on':''}" data-lv="${i}" aria-label="${ANAME[kind]} ${i} 点" aria-pressed="${!locked&&v>=i}" ${locked?'disabled':''}></button>`).join('')}</div>`;
+  let top='';
+  if(kind==='hp'){
+    const t=thrOf();
+    top=`<button type="button" class="btn ${AD.frail?'pink':'line'}" id="frailBtn" aria-pressed="${AD.frail}">病弱：健康 −1，自由点 +2</button>`;
+    top+=`</div><div class="at-big"><span>必杀门槛</span><b>${t}</b></div><div class="pips">${'<i></i>'.repeat(t)}</div><p class="mini">对方的<b>标签优势达到这个数字</b>，你就会死亡。健康 1、3 不增加效果。`;
+  }
+  if(kind==='dex'){
+    top=`</div><div class="at-big"><span>携带量</span><b>${v+1}</b><span>件（灵巧＋1）</span></div><div class="carry">${Array.from({length:v+1},(_,i)=>`<i class="${fx.grew&&i===v?'new':''}">${i+1}</i>`).join('')}</div><p class="mini">才能【制作】也能把两个带标签的道具合成为双标签道具；对应的医学系才能可替代灵巧 3。加工需要材料与时间。枪械要灵巧 2 以上或枪械相关才能才能使用，带【射击】标签的道具由灵巧 4 制作。`;
+  }
+  if(kind==='int'){
+    top=`</div><div class="qn"><span style="font-weight:900">提问次数</span><b>${[0,1,3,3,5][v]}</b><span class="mini">跑团提问每次跑团刷新；学裁提问每章限次。拒答仍会消耗次数。</span></div><p class="mini">一般提问，主持人只回答「是」或「否」。`;
+  }
+  if(kind==='cha'){
+    top=`<button type="button" class="btn ${AD.shiny&&v>=2?'pink':'line'}" id="shinyBtn" aria-pressed="${AD.shiny&&v>=2}" ${v<2?'disabled':''}>✦ 超级无敌美丽</button>`;
+    top+=`</div><p class="mini">魅力是公开数值。<b>超级无敌美丽</b>要场上魅力 2 以上且唯一最高，开启前须和主持人确认；头衔会即时转移，但死者已取得的外观保护仍然保留。`;
+  }
+  const un=unlockList(kind).map(u=>`<div class="un ${u[3]?'on':''} ${fx.fresh.includes(u[0])?'fx':''}"><small>${u[1]}</small><b>${u[0]}</b><p>${u[2]}</p>${u[3]?demoFor(u[0]):''}</div>`).join('');
+  return `<div class="at-panel ${fx.stamp?'shake':''}"><div class="at-row"><span class="at-name">${ANAME[kind]}</span>${dots}${top}</p><div class="unlocks">${un}</div>${fx.stamp?`<div class="bigstamp stampin">${fx.stamp}</div>`:''}${kind==='cha'&&AD.shiny&&v>=2?sparkHTML():''}</div>`;
+}
+function bindAttr(root,kind){
+  const wrap=$('#atWrap',root);
+  const on=()=>unlockList(kind).filter(u=>u[3]).map(u=>u[0]);
+  const redraw=(before,extra)=>{
+    const after=on(); const fresh=after.filter(x=>!before.includes(x));
+    wrap.innerHTML=attrHTML(kind,Object.assign({fresh,stamp:fresh[0]||''},extra||{}));
+    bindAttr(root,kind);
+  };
+  $$('.dot',wrap).forEach(d=>d.addEventListener('click',()=>{
+    const before=on(), lv=+d.dataset.lv, old=AD[kind];
+    AD[kind]=AD[kind]===lv?lv-1:lv;
+    if(kind==='cha'&&AD.cha<2) AD.shiny=false;
+    redraw(before,{grew:kind==='dex'&&AD.dex>old});
+  }));
+  const fb=$('#frailBtn',wrap); if(fb) fb.addEventListener('click',()=>{const before=on(); AD.frail=!AD.frail; if(AD.frail) AD.hp=0; redraw(before);});
+  const sb=$('#shinyBtn',wrap); if(sb) sb.addEventListener('click',()=>{const before=on(); AD.shiny=!AD.shiny; redraw(before);});
+}
+const attrStep=(kind,cap)=>({cap,
+  view:()=>`<div class="pg"><h2 class="h-tab rv"><span>属性：${ANAME[kind]}</span></h2><p class="lead rv" ${D(100)}>点圆圈试试看，解锁时会跳出效果。</p><div id="atWrap" class="rv" ${D(200)}>${attrHTML(kind)}</div></div>`,
+  bind:root=>bindAttr(root,kind)});
+const ITEMTAGS=[
+ {k:'射击',sub:'凶器优势 2',html:()=>`<div class="flash"></div><div class="h3">【射击】</div><p class="lead">拥有【射击】标签的凶器，优势为 <b>2</b>；一般凶器是 1。</p><div class="slot3"><div class="hot"><small>凶器</small><b>2</b></div><div><small>才能</small><b>—</b></div><div><small>机关</small><b>—</b></div></div><p style="margin:12px 0 0;font-weight:900">开枪必定留下：</p><span class="clue pop" ${D(200)}>枪声</span><span class="clue pop" ${D(400)}>弹道或弹壳</span><p class="mini">需要灵巧 2 或枪械相关才能，才可以使用枪械当凶器；带【射击】标签的道具，可以由灵巧 4 的玩家制作。</p>`},
+ {k:'机关',sub:'解锁机关格',html:()=>`<div class="h3">【机关】<span class="gear"></span></div><p class="lead">【机关】<b>本身不能填进机关格</b>，它是「让这件道具可以填机关格」的资格。</p><div class="slot3"><div class="lock"><small>【机关】标签</small><b>不能填</b></div><div class="hot pop"><small>道具的另一个标签</small><b>机关格 1</b></div><div><small>所以</small><b>至少双标签</b></div></div><ul class="pts" style="margin-top:10px"><li>拥有【机关】标签的道具，可以把道具上的<b>另一个标签</b>填进机关格，优势计 1。</li><li>同一件道具<b>只能使用一次就被消耗掉</b>，每项只生效一轮。</li><li>不管规模大小都只算 1 优势，哪怕把整栋大楼当作机关使用。</li><li>使用机关道具会留下痕迹。</li></ul>`},
+ {k:'解除',sub:'反制机关',html:()=>`<div class="h3">【解除】</div><p class="lead">死者方拥有【解除】标签的道具时，可以把<b>另一个标签填进机关格，获得优势 1</b>，用来反制对方的机关。</p><div class="slot3"><div class="lock"><small>【解除】标签</small><b>不能填</b></div><div class="hot pop"><small>道具的另一个标签</small><b>机关格 1</b></div><div><small>所以</small><b>至少双标签</b></div></div><p class="mini">和【机关】同理：标签本身只是资格，真正填进格子的是道具上的另一个标签。</p>`},
+ {k:'中毒',sub:'麻痺、安眠、即死',html:()=>`<div class="h3">【中毒】<span class="vial"></span></div><p class="lead">麻痺、安眠、即死、延迟死等，<b>所有相关效果都属于中毒标签</b>。</p><ul class="pts"><li>下药只会造成<b>中毒状态</b>，等同于一层虚弱。</li><li>当下毒造成<b>即死或延迟死</b>，都会开启死凶对决；被下毒的一方，<b>才能与道具皆不可使用，只能用健康去对抗</b>。</li><li>假如凶手没触发必杀，则进入死凶对决：死者默认<b>强大的身体战胜了毒药</b>，除了保留一层中毒 buff，其他才能道具全部生效。</li><li>中毒可以和其他道具合成，等于<b>隐藏下毒</b>；合成后毒性会隐藏，除非有特定的才能或检查工具才能发现，而且标准很严苛。</li><li>下毒的物品被别人误食，如果是致死效果，一样强制进入死凶对决。</li></ul>`},
+ {k:'解毒',sub:'自动抵销中毒',html:()=>`<div class="h3">【解毒】<span class="vial anti"></span></div><p class="lead">解药是<b>特殊道具标签，不是真的解毒</b>。</p><ul class="pts"><li>它的效果只有一个：<b>凶手必杀失败、死凶对决发生时</b>，身上拥有解毒的道具会自动使用，抵销自己身上的中毒效果。</li><li>除此之外没有其他效果。</li><li>就算死者在死凶对决中胜利，依情况，死者依然可能被毒死。</li></ul>`}
+];
+const S_ATTR={id:'attr',type:'page',kick:'创角 2',title:'属性',
+rules:[
+ ['点数',['创角共 4 点自由点，单项最高 4。','健康可选 −1【病弱】，多换 2 点自由点。','幕间成长（扩充规则）：一点自由点需要十点剧情点，幕间限定，每章最多一次。']],
+ ['健康',['健康 −1：门槛 1；0～1：门槛 2；2～3【强壮】：门槛 3；4【超级强壮】：门槛 4。','健康与魅力要反映在外貌上：强壮不能写成纤细瘦小，超级强壮要有明显肌肉，病弱要看起来羸弱。']],
+ ['灵巧',['携带量＝灵巧＋1；才能道具同样占携带量。','灵巧 2：改造物品、加入【机关】、合成双标签；灵巧 3：有原料时制作【解毒】【中毒】；灵巧 4：最多三标签的道具，也可以制作枪械。','【制作】可替代灵巧 2，对应医学系才能可替代灵巧 3。加工需要材料与时间。','枪械要灵巧 2 以上或对应才能才能使用。合成通常不增加凶器格分值，增加的是功能。']],
+ ['聪慧',['提问次数：聪慧 1 为 1 次，2 为 3 次，3 为 3 次，4 为 5 次。','跑团提问每次跑团刷新；学裁提问每章限次。一般提问只回答是或否。','拒答仍会消耗次数。']],
+ ['魅力',['魅力是公开数值；除非使用才能，否则不能隐藏或改变。','魅力 2【华丽谢幕】：凶手魅力为 0 时完全察觉不到那个言弹；其他情况依凶手魅力，由主持人衡量能破坏多少。','【超级无敌美丽】：场上魅力 2 以上且唯一最高才能取得，要和主持人确认。可以决定自己死亡时的模样，即使尸体进了绞碎机也不受影响，处刑时同样适用。','头衔即时转移；转移本身是一种情报，但不能当证据。持有者死后，已取得的外观保护仍然保留。']],
+ ['特殊道具标签',['【射击】：拥有此标签的凶器优势为 2；需要灵巧 2 或枪械相关才能才可使用，道具可由灵巧 4 制作。开枪留下枪声与弹道或弹壳。','【机关】与【解除】都是「解锁可以填入机关格」的能力，标签本身不能填入：拥有该标签的道具，可以把道具上的另一个标签填进机关格，所以至少要双标签道具才能生效。','【机关】：优势计 1，不管规模大小；同一件道具使用一次就被消耗，每项只生效一轮，会留下痕迹。','【解除】：死者方用来反制机关，把另一个标签填进机关格获得优势 1，同样需要双标签道具。','【中毒】：麻痺、安眠、即死、延迟死都属于中毒标签。下药造成中毒状态＝一层虚弱；造成即死或延迟死会开启死凶对决，被下毒方才能与道具皆不可使用，只能用健康对抗。凶手没触发必杀就进入死凶对决，死者默认身体战胜毒药，除了一层中毒 buff，其他才能道具全部生效。','【中毒】可以与其他道具合成，等于隐藏下毒；合成后会隐藏，除非有特定才能或检查工具才能发现，标准很严苛。被别人误食且为致死效果时，一样强制进入死凶对决。','【解毒】：不是真的解毒。只有在凶手必杀失败、死凶对决发生时自动使用，抵销自己身上的中毒效果；除此之外没有其他效果。即使死者在对决中胜利，依情况仍可能被毒死。']]
+],
+steps:[
+{cap:'四项属性用来<b>解锁能力与资格</b>，不用来掷骰。创角共有 <b>4 点</b>，单项最高 4。',
+ view:()=>`<div class="pg two"><div><h2 class="h-tab rv"><span>属性</span></h2><div class="box rv" ${D(120)}>
+ ${[['健康',1,'决定必杀门槛'],['灵巧',1,'携带量与加工'],['聪慧',2,'提问次数与推理能力'],['魅力',0,'外表与特殊头衔']].map((a,i)=>`<div class="at-row pop" ${D(250+i*160)} style="padding:8px 0;border-bottom:2px solid var(--line)"><span class="at-name" style="font-size:22px">${a[0]}</span><div class="dots">${[1,2,3,4].map(j=>`<span class="dot ${a[1]>=j?'on':''}" style="width:30px;height:30px;border-width:3px;display:inline-block;cursor:default"></span>`).join('')}</div><span class="mini" style="margin:0">${a[2]}</span></div>`).join('')}
+ <p class="lead pop" ${D(950)} style="margin:12px 0 0">合计 <b>4 / 4</b> 点</p></div></div>
+ <div><ul class="pts rv" ${D(300)}><li>每点亮一个圆圈就是投入一点。</li><li>健康可以选 <b>−1【病弱】</b>，多换 2 点。</li><li>接下来逐项点亮，看看<b>每一级会解锁什么</b>。</li></ul></div></div>`},
+attrStep('hp','<b>健康决定必杀门槛</b>：对方的标签优势达到这个数字，你就会死亡。点亮圆圈，或按「病弱」看看门槛怎么变。'),
+attrStep('dex','<b>灵巧决定携带量与加工能力</b>。点亮到 2、3、4 级，看看解锁什么。'),
+attrStep('int','<b>聪慧决定提问次数与推理能力</b>。每一级都会解锁一个能力。'),
+attrStep('cha','<b>魅力 2</b> 解锁【华丽谢幕】。魅力 2 以上时可以按「超级无敌美丽」，但一定要先<b>和主持人确认</b>。'),
+{cap:'道具有五种<b>特殊标签</b>。点一下每个标签，看它在对决里做什么。',
+ view:()=>`<div class="pg"><h2 class="h-tab rv"><span>特殊道具标签</span></h2><div class="itemtags rv" ${D(120)}>${ITEMTAGS.map((t,i)=>`<button type="button" class="it" data-it="${i}" aria-pressed="${i===AD.item}">【${t.k}】<small>${t.sub}</small></button>`).join('')}</div><div class="itfx rv" ${D(260)} id="itfx">${ITEMTAGS[AD.item].html()}</div></div>`,
+ bind:root=>{ $$('[data-it]',root).forEach(b=>b.addEventListener('click',()=>{ AD.item=+b.dataset.it; $$('[data-it]',root).forEach(x=>x.setAttribute('aria-pressed',String(x===b))); const fx=$('#itfx',root); fx.innerHTML=ITEMTAGS[AD.item].html(); fx.classList.remove('rv'); fx.closest('.page').classList.remove('still'); })); }}
+]};
+
+/* ===== 羁绊 ===== */
+const BONDS=[['才能羁绊','师承','一位退休的调香师收留并教导我，她半年前失踪了。'],['背景羁绊','孤儿','我在圣玛丽孤儿院长大，十二岁时被人带走。'],['负面羁绊','顶替','这个才能原本属于同期的另一个人，她现在下落不明。']];
+const LIB=['孤儿','财阀','单亲','流浪','寄养','世家','师承','机构','教团','社团','帮派','军警','事故','失踪','顶替','背叛','救命','隔绝','血亲','挚友'];
+const S_BOND={id:'bond',type:'page',kick:'创角 3',title:'羁绊',
+rules:[['羁绊',['需要填写才能羁绊、背景羁绊、负面羁绊；每栏写「标签＋一句话」，四十字以内。','负面羁绊必填；其余两栏能不能留空，由主持人决定。','标签可以自创；可以和别人撞，主持人可能把背景接在一起；也可以新增更多条。','想与其他 PC 联动时，联动之前一定要先跟主持人报备。','人物卡完成后，主持人可能会根据角色的羁绊，进行调整还有世界观合并，你认为的角色设定，不保证为真。']]],
+steps:[
+{cap:'羁绊很简单：每一栏写<b>「标签＋一句话」</b>，让主持人把你的角色接进主线。',
+ view:()=>`<div class="pg two"><div><h2 class="h-tab rv"><span>羁绊</span></h2><div class="box rv" ${D(100)}>${BONDS.map((b,i)=>`<div class="bond-row rv" ${D(300+i*380)}><span class="k ${i===2?'neg':''}">${b[0]}${i===2?' '+T('必填','dark'):''}</span><span class="t">${T(b[1])}</span><p>${b[2]}</p></div>`).join('')}</div></div>
+ <div><ul class="pts rv" ${D(200)}><li><b>才能羁绊</b>：才能从哪里来，连向主线。</li><li><b>背景羁绊</b>：出身与人际，连向其他 PC。</li><li><b>负面羁绊</b>：秘密与动机，连向案件。</li><li>一句话<b>四十字以内</b>；标签可以自创，也可以新增更多条。</li></ul>
+ <div class="box rv" ${D(700)} style="margin-top:14px"><h3 class="h3">参考标签</h3><div class="libchips">${LIB.map(t=>`<span>${t}</span>`).join('')}</div><p class="mini">和别人撞标签没关系，主持人可能把你们的背景接在一起。</p></div></div></div>`},
+{cap:'写专有标签的时候，注意这三件事。',
+ view:()=>`<div class="pg narrow"><h2 class="h-tab rv"><span>写标签时注意</span></h2>
+ <div class="three">${[['保留伏笔','你可以保留伏笔，这可以让主持人更好的发挥。'],['不要写复杂的专有名词','比如你写「圣玛丽孤儿院」，还补充了它的历史和院长，但主持人视角可能只需要「孤儿院」这个标签来使用即可。'],['联动不必写对方名字','如果想与其他 PC 联动，不一定要写上对方的名字和大量设定；你们完全可以制定相同的羁绊标签跟描述，这让主持人更方便。<b>但联动之前，一定要先跟主持人报备。</b>']].map((x,i)=>`<div class="goal pop" ${D(300+i*240)}><em>${i+1}</em><p><b>${x[0]}</b><br>${x[1]}</p></div>`).join('')}</div>
+ <p class="mini rv" ${D(1150)}>人物卡完成后，主持人可能会根据角色的羁绊进行调整，还有世界观合并；你认为的角色设定，不保证为真。</p></div>`},
+{gm:true,cap:'收到角色卡之后，主持人照这几点审一遍，比之后临场处理省事得多。',
+ view:()=>`<div class="pg two"><div class="box rv"><h3 class="h3">审核角色卡</h3><ul class="pts">
+ <li>三个正向才能<b>是不是同一个方向</b>：同类项只会取一个生效，重复等于浪费。</li>
+ <li>负面才能有没有<b>具体到能在场上触发</b>；只写性格不算。</li>
+ <li>战斗才能有没有标记；<b>【预判】【制作】</b>是否符合才能设定。</li>
+ <li>运气类是否一正一负；<b>禁止「超高校级的奇迹」</b>。</li>
+ <li>健康与魅力有没有反映在外貌描述上。</li></ul></div>
+ <div class="box rv" ${D(220)}><h3 class="h3">羁绊要怎么收</h3><ul class="pts">
+ <li>负面羁绊必填，<b>它就是这个角色的杀人动机来源</b>。</li>
+ <li>专有名词太复杂的，直接跟玩家要一个标签就好。</li>
+ <li>想联动的玩家<b>要先报备</b>；同一个羁绊标签可以接在一起。</li>
+ <li>合并与补完之后<b>不回传</b>，但要先讲清楚这件事。</li></ul></div></div>`},
+{cap:'角色卡完成，<b>交给主持人</b>。接下来，第一章开始。',
+ view:()=>`<div class="pg"><div class="submit"><div class="mini-card fly" ${D(300)} style="animation-delay:300ms"><div class="mc-h">人物卡</div><b>朝雾 诗织</b>${T('超高校级的调香师')}<i></i><i style="width:70%"></i><i style="width:85%"></i></div><div class="gm-box rv">主持人<span style="font-size:14px;color:#bbb">收件</span><span class="ok stampin" ${D(1300)}>已交卡</span></div></div></div>`}
+]};
+/* ===== 舞台：自我介绍 ===== */
+const S_SELF={id:'self',type:'stage',kick:'第一章',title:'自我介绍',
+rules:[['自我介绍',['此环节将在游戏正式开始时，强制进行。','主持人指定一名玩家，或由玩家报名，担任主视角，接着该玩家的剧情点将全部归零。','接下来担任主视角的角色，前往不同地图，接触其他角色进行 RP，被接触的角色顺势发出才能介绍图。','队伍有人数上限，由主持人决定，这里暂时推荐 3～4 人；满员时最早加入的玩家转战后台。','目的：让玩家拥有更多的时间充分了解认识每个角色、增加 RP 机会、展开剧情，同时让前台不至于混乱。','同时避免团开了好几章节，玩家连跟自己跑团的角色是谁都不记得；弹丸团时常进行隐密行动，真的有可能记不住一起游玩的角色。']],
+['扩充规则',['PC 人数太多时，可以介绍完一半的人之后，换二号玩家担任主视角，由主持人决定。']]],
+steps:[
+{cap:'交卡之后，画面分成两块：中间的大框是<b>前台</b>，所有人都看得到；右下的小框是<b>你的后台</b>，只有你和主持人看得到。游戏正式开始，先<b>强制进行自我介绍</b>。',
+ mode:'前台',loc:'教室',pts:10,front:[sys('第一章　开幕'),gm('醒来时，所有人都被关在这座学园里。在一切开始之前，先互相认识一下吧。')]},
+{gm:true,cap:'先说<b>为什么要挑主视角</b>。十六个人同时 RP 扮演会非常混乱，没有人读得完前台；由主视角带着镜头，让前台同时讲话的人保持在 <b>3～4 人</b>刚刚好。其他人不是消失，只是<b>默认在队伍里没有出声</b>。',
+ widget:{type:'memo',t:'为什么要挑主视角',li:['十六人同时 RP，前台会塞满彼此无关的对话，玩家看不完也记不住。','主视角只带 3～4 个人在前台讲话，节奏刚好，主持人也顾得过来。','没在讲话的人不是离场，是默认在队伍里跟着走。','顺便解决另一个问题：团跑了好几章，玩家连一起跑团的角色是谁都不记得。']}},
+{gm:true,cap:'主持人的操作顺序如下，每一步旁边写的就是你要做的事。',
+ widget:{type:'memo',ol:true,t:'主持人操作顺序',li:['指定一名玩家，或开放报名，决定主视角。','把这名玩家的剧情点归零，并在后台通知他。','宣布起点地图，让主视角选择要先去哪里。','主视角抵达后，主持人开这个地点的场景描述。','安排一名角色在场，让两人 RP；被接触的角色发出才能介绍图。','把这名角色加进队伍；队伍满了，就让最早加入的人转战后台。','所有人都介绍完，宣布自我介绍结束，进入日常。']}},
+{cap:'主持人<b>指定一名玩家，或由玩家报名</b>，担任自我介绍的主视角。',
+ widget:{type:'map',here:'教室',team:[],visited:[]},front:[gm('这次的自我介绍，由 朝雾诗织 担任主视角。')],back:[gm('你被选为主视角。接下来由你带着镜头，去认识每一个人。')]},
+{cap:'担任主视角的玩家，<b>剧情点全部归零</b>。',pts:0,back:[sys('剧情点 10 → 0')]},
+{cap:'主视角前往不同地图，接触其他角色进行 RP；被接触的角色顺势发出<b>才能介绍图</b>，然后加入队伍。',
+ loc:'食堂',widget:{type:'map',from:'教室',here:'食堂',team:['moe'],fresh:true,visited:['教室']},
+ front:[gm('午后的食堂里，一个女孩正对着不锈钢餐盘练习笑容。'),me('……你在做什么？'),pc('moe','啊，被看到了！我是早乙女萌，请多指教♪'),card('moe')]},
+{cap:'继续前往下一张地图，队伍越来越热闹。',
+ loc:'美术室',widget:{type:'map',from:'食堂',here:'美术室',team:['moe','kujo'],fresh:true,visited:['教室','食堂']},
+ front:[gm('美术室里，一个高大的男生正拿着木刀比划石膏像的角度。'),pc('kujo','九条刚。不必紧张，我只是在确认距离。'),card('kujo')]},
+{cap:'<b>队伍有人数上限</b>，由主持人决定，这里暂时推荐 3～4 人。示范里设为 3 人。',
+ loc:'仓库',widget:{type:'map',from:'美术室',here:'仓库',team:['moe','kujo','hide'],fresh:true,visited:['教室','食堂','美术室']},
+ front:[gm('仓库深处传来断断续续的琴声，是一台旧电子琴。'),pc('hide','啊，吵到你们了吗？我是森秀人。'),card('hide')]},
+{cap:'队伍满了还要再加人，<b>最早加入的玩家就转战后台</b>，前台不会挤成一团。',
+ loc:'医务室',widget:{type:'map',from:'仓库',here:'医务室',team:['kujo','hide','yuki'],fresh:true,gone:['moe'],visited:['教室','食堂','美术室','仓库']},
+ front:[gm('医务室里飘着消毒水的味道。'),pc('yuki','要是受伤了就来找我。我是柊由纪。'),card('yuki'),sys('队伍已满：早乙女萌 离开队伍，转战后台')]},
+{cap:'目的是让玩家有足够时间<b>认识每个角色</b>、增加 RP 机会、顺势展开剧情。弹丸团常常进行隐密行动，团跑了好几章，玩家可能连一起跑团的角色是谁都记不住。',widget:{type:'why'}},
+{cap:'<b>扩充规则</b>：PC 人数太多时，可以在介绍完一半的人之后，换二号玩家担任主视角，由主持人决定。',
+ widget:{type:'map',here:'医务室',team:[],crown:'kujo',visited:['教室','食堂','美术室','仓库']},front:[gm('自我介绍后半段，改由 九条刚 担任主视角。')]}
+]};
+
+/* ===== 舞台：日常 ===== */
+const SHOP=[['单标签道具：手电筒【照明】',3,'收到。手电筒会合理地出现在美术室，记得自己去拿。'],['药物道具（一种基础药效）',5,'收到。具体效果由我决定，会投放在医务室。'],['隐密行动',5,'收到。下一次行动，你进入隐密结算。'],['个人剧情事件',10,'收到，我会安排。']];
+const S_DAILY={id:'daily',type:'stage',kick:'第一章',title:'日常',
+rules:[
+ ['规模',['每段日常由主持人决定：天数 × 时段 × 每人行动次数。']],
+ ['前台',['主频道公开演出，所有人都能看到。','主持人会宣布行动几天、哪些时段、哪些地点、每个人行动几次；玩家要在这几天中选择自己可行动的时段，主持人就会按照时间顺序，在前台逐一推进剧情。']],
+ ['片场',['玩家有时候会有另开讨论组与其他玩家 RP 互动的需求，这种时候可以自行拉组 RP，并且可在跑团时间外进行，不受行动次数限制。','从规则上来算，属于碎片个人时间的人物交流，不影响正史时间。','但如果 RP 得很精彩，又或者谈论重要的协议或剧情事件，想纳入正史，就需要将这段剧情提交主持人审核，通过可获得剧情点；没通过或没申请，视为一次普通聚会，不能当学裁证据或剧情事件。']],
+ ['隐密行动',['在后台私下结算。隐藏的只是大家的行动判定内容，不是全员透明人。','隐密行动中，如果角色们在同场景，不会触发讨论组跟互动，但会得到主持人反馈：这段时间有谁跟你在同一个区域过，但你不知道对方做了什么；能具体得到多少情报，看主持人给的裁定。','隐密行动可由主持人安排、剧情触发，或花 5 点剧情点购买；另外隐密行动还有凶手特供版本，有打折优惠，要买要快。','在没有行动的时段，主持人依人设做模糊处理。在学裁上，模糊的时间线只能缩小嫌疑范围，但不能直接定罪。']],
+ ['话题',['当玩家在探索中得到特殊情报，就会触发【话题】。','在下次前台集合或主持人开剧情时，玩家们会重新聚集，强行讨论话题的内容：有报名的玩家进行互动与操作，没报名的玩家在后台观看。','这是用来强行推进剧情，并且避免玩家 RP 扮演走歪剧情。']],
+ ['剧情点与购买',['初始每人拥有 10 点剧情点，主持人依 RP、交流、活动与学裁表现发放。','会有专门的点数购买环节。购买的道具不会直接给予玩家，而是合理地投放在地图上，玩家需要亲自去拿。','建议主持人把购买安排在开团前或当天团结束，这样比较好整理大量讯息，具体怎么安排由主持人决定。','场景中的道具除非有特殊唯一性，所有人都找得到，也可能被别人先拿走，想独占就得带在身上。','点数购买的道具，大部分情况会合理地出现在其应该出现的场景，并且数量是复数。','随身道具在案件中如果被搜身，一般会被搜出来。','一个章节结束后，身上的一般道具会被清理，具体如何由主持人裁定；该功能主要是清理垃圾，玩家特别想保留的重要物品，可以视情况保留。','才能道具一直都是永久保留。']]
+],
+steps:[
+{gm:true,cap:'先讲<b>为什么日常大部分集中在前台</b>：本规则的日常，<b>不需要提前建立地图探索用的讨论组</b>。',
+ clearFront:true,clearBack:true,mode:'前台',loc:'',pts:0,
+ widget:{type:'memo',t:'为什么集中在前台',li:['过度隐藏彼此之间的情报，只会造成玩家对目前主线进度产生误判。','地图重复探索的意义非常不大，开一堆讨论组只是把同一件事讲很多次。','所以前台的剧情设定上默认：日常中大家会<b>简单知道</b>谁在哪里，而不是掌握极度准确的时间表。']},
+ front:[sys('第一章　日常')]},
+{gm:true,cap:'接着是<b>时间表</b>的开法：给出天数、时段、地点与每人行动次数，玩家自己挑，主持人再按时间顺序推进。',
+ widget:{type:'memo',ol:true,t:'时间表怎么开',li:['宣布行动几天、哪些时段、哪些地点、每人几次行动。','玩家根据自己的可行动次数，挑选哪一个时段去哪一个地点。','主持人按照时间顺序，开不同时段、不同地点的地图探索与 RP。','中间要安排定期的集体活动，或触发话题、推进主线行动。','日常时刻表<b>有可能被突发事件中断</b>：例如设定了五天的行动表，但凶手第三天晚上就动手，这很正常。']}},
+{cap:'自我介绍结束，进入<b>日常</b>。日常有三种模式，先看规模：主持人宣布<b>行动几天、哪些时段、哪些地点、每人行动几次</b>。',
+ clearFront:true,clearBack:true,mode:'前台',loc:'',pts:0,widget:{type:'sched',d:3,s:3,a:2},
+ front:[sys('第一章　日常'),gm('接下来是三天。每天分早、午、夜三个时段，每人每天可以行动两次。可去的地点：食堂、美术室、仓库、医务室、音乐室。')]},
+{cap:'<b>模式一　前台</b>：玩家先在这几天中<b>选择自己可行动的时段</b>。',
+ widget:{type:'plan'},back:[me('第一天：早上去食堂，夜间去仓库。'),gm('收到。')]},
+{cap:'接着主持人<b>按照时间顺序，在前台逐一推进剧情</b>。所有人都看得到，表现好的 RP 会拿到剧情点。',
+ mode:'前台',loc:'食堂　第一天早上',widget:null,pts:5,
+ front:[gm('第一天早上，食堂。九条在喝茶，早乙女在一旁哼歌。'),me('早安。这杯茶……闻起来有樟脑的味道？'),pc('kujo','大概是仓库拿出来的茶叶罐吧。别在意。'),gm('朝雾诗织：完美的 RP，剧情点 +5。')],
+ back:[sys('剧情点 0 → 5')]},
+{cap:'<b>模式二　片场</b>：玩家自行拉组 RP，可以在跑团时间外进行，不受行动次数限制。规则上属于<b>碎片个人时间</b>的人物交流，不影响正史时间。',
+ mode:'片场',loc:'讨论组',widget:{type:'studio'}},
+{cap:'如果 RP 得很精彩，或谈到重要的协议、剧情事件，想<b>纳入正史</b>，就把这段剧情提交主持人审核。通过可获得剧情点；没通过或没申请，视为一次普通聚会，<b>不能当学裁证据或剧情事件</b>。',
+ widget:{type:'studio2'}},
+{cap:'<b>模式三　隐密行动</b>：在你的后台私下结算，<b>前台不会有任何讯息</b>。隐藏的只是行动判定的内容，不是让人变成透明人。',
+ mode:'隐密',loc:'仓库　第一天夜间',widget:null,
+ back:[sys('第一天　夜间'),me('（隐密）去仓库找装香料用的空木箱。'),gm('仓库很暗，樟脑味很重，角落那袋樟脑丸破了。')]},
+{gm:true,cap:'隐密结算时，主持人要做的事：把同场景的人记下来，只回报<b>谁来过</b>，不回报做了什么；给多少情报，自己抓分寸。',
+ widget:{type:'memo',ol:true,t:'隐密行动的处理',li:['收到隐密申请，先确认时段与地点。','在后台单独回复这名玩家的行动结果。','同场景的其他人，只告诉他们「这段时间有谁来过」。','凶手的隐密要另外记一份，方便之后核对案件时间线。']}},
+{cap:'在同一个场景的人，<b>不会触发讨论组与互动</b>，但主持人会反馈：这段时间有谁跟你在同一个区域，<b>你不知道对方做了什么</b>。能得到多少情报，看主持人的裁定。',
+ back:[gm('这段时间，九条刚也来过仓库这个区域，但你不知道他做了什么。'),note('笔记：第一天夜间，九条也在仓库。')]},
+{cap:'隐密行动可以由主持人安排、剧情触发，或花 <b>5 点剧情点购买</b>；另外还有<b>凶手特供版本</b>，有打折优惠，要买要快。没有行动的时段，主持人依人设做模糊处理，模糊的时间线在学裁上只能缩小嫌疑范围，<b>不能直接定罪</b>。',
+ mode:'前台',loc:''},
+{cap:'<b>【话题】</b>：玩家在探索中得到特殊情报就会触发。下次前台集合或主持人开剧情时，大家会重新聚集，<b>强行讨论话题的内容</b>。',
+ loc:'体育馆前',front:[sys('触发话题：被撕开的封条'),gm('第二天早上，全员被广播叫到体育馆前。萌昨天在这里发现封条被撕开了。')]},
+{cap:'<b>有报名的玩家进行互动与操作，没报名的玩家在后台观看。</b>这是用来强行推进剧情，避免玩家的 RP 扮演走歪。',
+ widget:{type:'seats',on:['moe','yuki']},
+ front:[gm('话题「被撕开的封条」。参加：早乙女萌、柊由纪。'),pc('moe','封条是从里面撕开的，不是外面。'),pc('yuki','也就是说，有人先进去过。')],
+ back:[note('你没有报名这个话题，在后台观看。')]},
+{cap:'日常告一段落，进入<b>点数购买环节</b>。购买在后台私下提交，点右下角的商品试试看。',
+ widget:null,mode:'前台',loc:'',front:[sys('第一天结束'),gm('开放剧情点购买，需要的人请在后台提交。')],bwidget:{type:'shop'}},
+{cap:'购买的道具<b>不会直接给玩家</b>，而是合理地投放在地图上，要亲自去拿，而且数量通常是复数。随身道具在案件中被搜身一般会被搜出来；章末一般道具会被清理，<b>才能道具永久保留</b>。',
+ bwidget:null,front:[gm('东西都放到该出现的地方了，自己去拿。')]}
+]};
+
+/* ===== 舞台：非日常与搜查 ===== */
+const DESC={
+ '音乐室':'森秀人倒在舞台下方，[[脖子侧面有一道细长的击打痕]]，[[右前臂有一处淤青]]。舞台高约一米，边缘整齐。他的[[外套上沾着少许白色粉末]]。房间里[[只有木头和灰尘的气味]]。',
+ '仓库':'仓库里堆着纸箱和旧体育器材。角落放着一袋[[樟脑丸]]，袋口破了，[[白色粉末撒在地上]]。墙边的木刀架有五个位置，[[只挂着四把木刀]]。地上有[[一块被拖开的纸箱]]。'
+};
+const S_INVEST={id:'invest',type:'stage',kick:'第一章',title:'非日常　搜查',
+rules:[
+ ['尸体发现',['当尸体发现触发的时候（具体几人触发警报，全看主持人准备的校园规则），日常结束。','接着触发剧情，然后主持人公布死者、发现地点、发现者。','接着公布可调查的场景清单，以及本案预设的【话题】。']],
+ ['话题',['话题的意思，就是搜查中会得到的几个预设疑问，提供给玩家当作搜查考量的方向。','在搜查中，如果满足特定的搜查结果，就会得到【话题】，该话题用于学级裁判使用。','话题的作用除了引导玩家搜查方向，同时也是引导玩家的推理方向，避免出现误判。']],
+ ['搜查',['搜查不使用任何行动次数限制、调查点数或随机判定等，且可以单独也可以共同调查。','虽然剧情代入层面上，凶手单独行动有掩盖证据的可能，但出于游戏机制，不强求绑定调查；剧情处理上会默认大家一群人调查，特殊剧情事件另外裁定，由主持人自行决定。','玩家调查得到的是场景描述与回复，描述不会标出哪些是重点，玩家需要依靠自己对描述进行深入调查行为。','在搜查中，才能标签能正常使用，并且可能拿到更深一层的情报。']],
+ ['聪慧能力',['【观察眼】：搜查时消耗一次学裁提问，指定一个地点，标出描述里需要注意的关键词，但不会追加额外情报。','【逻辑深潜】：消耗一次学裁提问，问言弹之间有没有还没推出的关联；会直接破开诡计的问题会被拒答。','【右脑解放】：取得全部言弹、或全部隐藏情报时收到通知。','【闪耀字谜】：自备十六个字提问，主持人从中挑字回答；剧情与学裁每章各一次。']],
+ ['言弹',['言弹是主持人事先写好的；玩家在学裁中说中关键时才会发出。','言弹本身不提供错误事实；看起来指错方向时，代表还没搜集完全。言弹总数不公开。']]
+],
+steps:[
+{gm:true,cap:'非日常开始前，主持人手上要先备好这些东西。',
+ clearFront:true,mode:'非日常',loc:'',pts:5,q:3,widget:{type:'memo',ol:true,t:'主持人：搜查怎么准备',li:['先定好校园规则：几个人在场才触发尸体发现的警报。','写好每个可调查场景的描述，<b>不要标出哪些是重点</b>。','定出本案的预设话题，公布数量与方向，引导搜查与推理。','决定哪些搜查结果会让话题成立，成立后带进学级裁判。','准备言弹清单与触发条件，先不要给玩家看。','抓收束时机：情报够了就宣布搜查结束。']},
+ front:[sys('第二天　早上')]},
+{cap:'第二天早上，<b>尸体被发现</b>（具体几人在场才触发警报，看主持人准备的校园规则）。日常结束，先触发剧情。',
+ clearFront:true,mode:'非日常',loc:'音乐室',pts:5,q:3,widget:null,bwidget:null,fx:'alarm',
+ front:[sys('第二天　早上'),gm('尸体被发现了！死者：森秀人。发现地点：音乐室。发现者：早乙女萌。')]},
+{cap:'接着公布<b>可调查的场景清单</b>，以及本案预设的<b>【话题】</b>。话题是搜查中会得到的几个预设疑问，用来引导搜查与推理方向，避免误判。',
+ widget:{type:'scenes',active:''},front:[gm('可调查场景：音乐室、仓库、美术室、医务室。本案预设话题：死亡地点、凶器、凶手。')]},
+{cap:'选一个场景，得到<b>描述</b>。描述不会标出哪些是重点，要靠自己深入调查。搜查不用行动次数，也不掷骰，可以单独也可以一起查。',
+ widget:{type:'desc',place:'音乐室',eye:false},front:[me('我调查音乐室的尸体周围。')]},
+{cap:'聪慧 2 的<b>【观察眼】</b>：消耗一次学裁提问，指定一个地点，描述里需要注意的关键词会被标出来，<b>不会追加额外情报</b>。按上方的按钮，再点亮起的关键词记进笔记。',
+ widget:{type:'desc',place:'音乐室',eye:'button'},q:2,back:[sys('使用【观察眼】：学裁提问 3 → 2')]},
+{cap:'<b>才能标签</b>在搜查中能正常使用，并且可能拿到更深一层的情报。',
+ widget:{type:'desc',place:'音乐室',eye:true},front:[me('我用【嗅觉鉴定】闻外套上的白色粉末。')],
+ back:[gm('是樟脑。和你前一晚在仓库闻到的味道一样。'),note('笔记：外套上的粉末＝仓库的樟脑。')]},
+{cap:'搜查<b>满足特定结果时，就会得到【话题】</b>，这个话题会带进学级裁判使用。',
+ widget:{type:'desc',place:'仓库',eye:false},
+ front:[pc('moe','我来查仓库！木刀架上……一、二、三、四。'),sys('取得话题：死亡地点'),gm('两个场景的气味对不上，话题「死亡地点」成立，可以带进学级裁判。')]},
+{cap:'调查告一段落，主持人宣布<b>搜查结束，进入学级裁判</b>。',
+ widget:null,front:[gm('搜查时间结束。所有人前往学级裁判场。')]}
+]};
+
+/* ===== 舞台：学级裁判 ===== */
+const S_TRIAL={id:'trial',type:'stage',kick:'第一章',title:'学级裁判',
+rules:[
+ ['流程',['开庭后先自由交流，但此时不要直接聊案件，而是按照流程，先讨论出将要讨论的话题；如果出现复数意见就投票决定。','搜查得到的话题，就是在裁判刚开始、大家都搞不清楚状况的时候，给予的基本提示。','决定话题后，要参加的人报名，话题进行中只有参加者能在前台发言。','讲到关键、主持人确认没问题，就打出赞同或论破；事后会记录触发言弹的玩家，给予点数奖励。','赞同与论破由主持人打出，也可以找人协助。','言弹发出后宣布话题结束，回到自由讨论，再选下一个话题。','所有话题讨论完，全员投票选出凶手。']],
+ ['其他',['言弹的触发者可以获得剧情点。','提前推对、跳过话题、卡关、投错或平票，由主持人依案件处理。']]
+],
+steps:[
+{gm:true,cap:'学裁是主持人最忙的一段，先看整套操作顺序。',
+ clearFront:true,mode:'学级裁判',loc:'',court:true,pts:5,q:2,
+ widget:{type:'memo',ol:true,t:'主持人：学裁怎么跑',li:['开庭后挡住「直接聊案件」，先让大家提候选话题。','意见分歧就投票，决定这一轮讨论什么。','让要参加的人报名，其他人旁听，前台只留参加者发言。','盯住讨论：讲到关键就<b>打出赞同或论破</b>，忙不过来可以找人协助。','打出言弹，记录触发者，事后给点数奖励。','宣布话题结束，回到自由讨论，再选下一个话题。','全部话题结束后，全员投票，接着结案与处刑。']},
+ front:[sys('学级裁判　开庭')]},
+{cap:'<b>学级裁判</b>开庭。先自由交流，但<b>此时不要直接聊案件</b>，而是按照流程，先讨论出将要讨论的话题。',
+ clearFront:true,mode:'学级裁判',loc:'自由讨论',court:true,fx:'court',pts:5,q:2,widget:{type:'seats',on:'all'},
+ front:[sys('学级裁判　开庭'),gm('先别急着推理。搜查时拿到的话题，就是现在的基本提示。'),pc('yuki','那就照顺序来，先决定要讨论哪一个。')]},
+{cap:'大家提出候选话题，出现<b>复数意见就投票决定</b>。点一个选项投票。',
+ widget:{type:'vote',q:'先讨论哪个话题？',opts:['死亡地点','凶器','凶手'],result:0,tally:[3,1,0]}},
+{cap:'话题决定后，<b>要参加的人报名</b>。话题进行中，<b>只有参加者能在前台发言</b>，其他人旁听。',
+ loc:'话题：死亡地点',widget:{type:'seats',on:['shiori','moe']},front:[gm('话题「死亡地点」。参加：朝雾诗织、早乙女萌。其他人先旁听。')]},
+{cap:'参加者互相讨论。',
+ front:[pc('moe','他倒在舞台下面，一定是在音乐室摔下来的！'),me('可是他的外套上沾着白色粉末，音乐室只有木头和灰尘的味道。')]},
+{cap:'讲到关键、主持人确认没问题，就打出<b>赞同</b>或<b>论破</b>，发出<b>言弹</b>并记录触发者。<b>赞同与论破由主持人打出</b>，也可以找人协助。',
+ pts:10,front:[me('那是樟脑丸的粉末。仓库那袋樟脑丸破了，粉末撒了一地。他是在仓库遇害，之后才被搬到音乐室的。'),stamp('论破'),bullet('樟脑丸粉末','朝雾诗织')],
+ back:[sys('言弹触发：剧情点 5 → 10')]},
+{cap:'言弹发出后，主持人<b>宣布话题结束</b>，回到自由讨论，再选下一个话题。',
+ loc:'自由讨论',widget:{type:'seats',on:'all'},front:[gm('话题「死亡地点」结束。回到自由讨论。')]},
+{cap:'下一个话题换人参加，流程一样：<b>讨论 → 讲到关键 → 言弹 → 话题结束</b>。',
+ loc:'话题：凶器',widget:{type:'seats',on:['moe','kujo','yuki']},
+ front:[gm('话题「凶器」。参加：早乙女萌、九条刚、柊由纪。'),pc('yuki','脖子侧面那道伤很细长，是棍状的东西打的。'),pc('kujo','舞台边缘也是直的，摔下来撞到也说得通。'),pc('moe','仓库的木刀架有五个位置，只挂着四把木刀，我搜查时数过。'),pc('yuki','伤口的宽度，和木刀对得上。'),stamp('赞同','agree'),bullet('少了一把的木刀架','早乙女萌')]},
+{cap:'隐密行动在<b>后台拿到的情报</b>，也可以在学裁中说出来。',
+ loc:'话题：凶手',widget:{type:'seats',on:['shiori','kujo']},
+ front:[gm('话题「凶手」。参加：朝雾诗织、九条刚。'),me('第一天夜里我在仓库隐密行动，主持人的反馈说，那段时间你也在仓库。'),pc('kujo','同一个区域而已，能说明什么？'),me('那一击打在剑道的有效部位上，而且少的正好是一把木刀。'),stamp('赞同','agree'),bullet('同一时段在仓库的人','朝雾诗织')]},
+{cap:'所有话题讨论完，<b>全员投票</b>选出凶手。点一个名字投票。',
+ loc:'投票',widget:{type:'vote',q:'谁是杀害森秀人的凶手？',opts:['九条刚','早乙女萌','柊由纪'],result:0,tally:[4,0,0]}},
+{cap:'<b>结案</b>：揭露真相，补上没被发现的细节，接着处刑。接下来换成<b>凶手视角</b>，看看案发当晚发生了什么。',
+ loc:'结案',widget:null,court:false,
+ front:[gm('投票结果：九条刚。'),pc('kujo','……我在仓库和他起了争执。回过神来，木刀已经挥出去了。'),gm('真相揭露完毕。接下来，处刑。'),sys('结案')]}
+]};
+/* ===== 死凶对决：共用 ===== */
+const PHASES=['核对资源','本轮效果','必杀判定','掷骰','增加虚弱','再次判定','下一轮'];
+const SIDE=o=>Object.assign({name:'',role:'',c:'#444',s:'',hp:2,weak:0,poison:false,antidote:false,drugged:false,fore:false,block:false,cancelM:false,dead:false,w:{n:'',v:0},t:{n:'',v:0},m:{n:'',v:0}},o);
+const INIT=o=>Object.assign({round:1,first:true,def:'b',show:{a:true,b:true},env:''},o);
+const SA=o=>SIDE(Object.assign({name:'A',role:'行凶方',c:'#f0167d',s:'A'},o));
+const SB=o=>SIDE(Object.assign({name:'B',role:'受袭方',c:'#3d7bff',s:'B'},o));
+const X={
+ box:(t,rows)=>`<div class="h3">${t}</div><div class="links">${rows.map(r=>`<div><b>${r[0]}</b>${r[1]}</div>`).join('')}</div>`,
+ chat:(t,rows,note)=>`<div class="h3">${t}</div><div class="xchat">${rows.map(r=>`<div class="xc ${r[0]}"><span>${r[1]}</span><p>${r[2]}</p></div>`).join('')}</div>${note?`<p class="mini">${note}</p>`:''}`,
+ scene:o=>`<div class="mini-stage"><section class="front"><header class="front-head"><b>前台</b><span class="chip">${o.mode||'前台'}</span>${o.loc?`<span class="chip w">${o.loc}</span>`:''}</header><div class="log">${(o.front||[]).map(msgHTML).join('')||'<div class="m-sys">前台没有任何讯息</div>'}</div></section><aside class="back"><header class="back-head"><b>你的后台</b></header><div class="log">${(o.back||[]).map(msgHTML).join('')||'<div class="m-sys">没有讯息</div>'}</div></aside></div>${o.note?`<p class="mini">${o.note}</p>`:''}`,
+ tln:(t,items,k)=>`<div class="h3">${t}</div><div class="tln">${items.map((x,i)=>`<span class="${i===k?'on':''}">${x[0]}<small>${x[1]}</small></span>`).join('')}</div>`,
+ noTag:(a,b)=>`<div class="h3">凶器要有标签</div><div class="links"><div><b>${a||'刀【切割】'}</b>有标签 → <em>优势 1</em></div><div><b>${b||'美工刀（没有标签）'}</b>没有被赋予词条 → <em>优势 0</em></div></div><p class="mini">道具只要描述上符合主持人判断能当凶器就能用，但<b>没有标签的道具算 0</b>；就算拿它反击，也补不回这个差距。</p>`,
+ traceTable:on=>`<div class="h3">搏斗痕迹基准</div><table class="trace-t"><tr><th>掷骰轮数</th><th>现场</th></tr>${[['0','没有逐轮搏斗痕迹；手段本身的痕迹仍在。'],['1','一处防御伤，或一件物品移位、倒下。'],['2','家具明显移位、多处血迹或衣物凌乱。'],['3 以上','现场混乱，存活方身上留下可见痕迹。']].map((r,i)=>`<tr class="${i===on?'on':''}"><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('')}</table>`,
+ weaponTbl:()=>`<div class="h3">凶器一览</div><table class="trace-t"><tr><th>道具</th><th>怎么填</th><th>优势</th></tr>${[['单标签道具　刀【切割】','标签填进凶器格','1'],['双标签道具　绳索【束缚＋捆绑】','两个标签二选一','1'],['才能道具　调香工具【调配＋气味】','一样只能选一个标签','1'],['枪械　手枪【射击】','需灵巧 2 或枪械相关才能','2'],['枪械（没有资格）','不会用，等于没拿','0'],['没有标签的道具　美工刀','没有被赋予词条','0']].map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td><b>${r[2]}</b></td></tr>`).join('')}</table>`
+};
+const R_KILL=[['偷袭',['凶手可以在任何时刻对死者进行行凶，完全由凶手单方面开启，不需要受袭方同意或知情。','死凶对决的触发裁定时机：凶手正面行凶时；远程攻击与定时机关是布置完成准备离开、或最后一次接触目标时判定；毒物是药效即将致死时判定。','在以上场合，会进行优势标签判定，主持人核对双方的标签优势并报出结果。如果凶手优势大于死者超过 2 标签（正常健康的情况），触发必杀；触发必杀就不会有任何后续判定，直接认定凶手计划成功，直接导致死者死亡。','假如凶手的优势标签不到 2，则会进入死凶对决。','死凶对决无法终止，必须以其中一人死亡为结局。','双方以【凶器＋才能＋机关】的公式填入对应的道具或才能标签，每一格只能填入一个。','根据情况，主持人可以隐藏凶手的身分发起偷袭；但如果偷袭失败，无论如何，死者都会知道与它对抗的玩家是谁。','死凶对决留下的痕迹不能抹去，只能伪装。']]];
+
+/* ===== 凶手视角 ===== */
+const KILLER={id:'killer',type:'battle',kick:'死凶对决',title:'凶手视角',rules:R_KILL,
+cases:[{name:'案发当晚',
+ init:INIT({show:{a:false,b:false},a:SIDE({name:'九条刚',role:'行凶方',c:'#3553d6',s:'九',hp:3,w:{n:'木刀【打击】',v:1},t:{n:'【剑术】',v:1}}),b:SIDE({name:'森秀人',role:'受袭方',c:'#15936c',s:'森',hp:3,w:{n:'美工刀（无标签）',v:0}})}),
+ steps:[
+  {phase:-1,hide:true,extra:()=>X.scene({mode:'前台',loc:'仓库　第一天夜间',front:[gm('夜间时段，仓库。九条与森秀人同时选了这个地点。'),pc('hide','你也来拿东西？'),pc('kujo','……嗯。')],back:[gm('（这个时段你没有行动，前台照常进行。）')],note:'死凶对决不是凭空开始的：它接在日常行动后面，两个人在同一个时段、同一个地点碰面。'}),cap:'先回到<b>日常</b>。第一天夜间，九条与森秀人都选了仓库，两人在房间里碰面，前台一切正常。'},
+  {phase:-1,hide:true,extra:()=>X.scene({mode:'隐密',loc:'仓库　第一天夜间',front:[gm('夜间时段，仓库。九条与森秀人同时选了这个地点。'),pc('hide','你也来拿东西？'),pc('kujo','……嗯。'),{t:'hide',x:'〔前台到这里就停住了〕'}],back:[me('（后台）我要对森秀人发起偷袭。'),gm('收到。进入死凶对决的判定，前台先暂停。')],note:'偷袭宣言是在后台送出的：完全由凶手单方面开启，不需要对方同意或知情。'}),cap:'凶手在<b>后台突然发起偷袭宣言</b>。前台的人什么都还不知道，主持人这时会把前台停下来。'},
+  {phase:-1,hide:true,extra:()=>X.scene({mode:'裁定',loc:'仓库',front:[gm('（前台暂停）'),{t:'hide',x:'〔主持人正在处理一件不公开的事〕'}],back:[gm('先核对双方手上的东西，再看有没有满足必杀。'),me('（后台）我用木刀，走【剑术】。')],note:'根据情况，主持人可以隐藏凶手的身分发起偷袭；但如果偷袭失败，无论如何，死者都会知道与它对抗的玩家是谁。'}),cap:'进入<b>裁定</b>：主持人把两边的资源核对一次。这时候才会跑出后面的对决画面。'},
+  {gm:true,phase:-1,extra:()=>X.box('主持人：收到偷袭宣言之后',[['第一步','在后台确认凶手要用什么手段、身上有什么'],['第二步','核对双方的道具与才能，<em>不要临场追加</em>'],['第三步','报出优势与必杀判定结果'],['第四步','成立就直接死亡；不成立才逐轮掷骰'],['第五步','结算痕迹，再和凶手讨论掩盖'],['注意','可以隐藏凶手身分，但偷袭失败就必须让死者知道对手是谁']]),cap:'主持人这时候要做的事：<b>核对、报数字、照结果走</b>，不能为了保住案件改结果。'},
+  {phase:0,set:{show:{a:true}},cap:'接着<b>先看有没有满足必杀</b>。凶手先填表：凶器填道具的标签，木刀【打击】1；战斗才能【剑术】1；没有机关。合计 2。'},
+  {phase:1,set:{show:{b:true}},extra:()=>X.noTag('木刀【打击】','美工刀（没有标签）'),cap:'<b>死者表</b>：森秀人健康 2，有<b>【强壮】</b>效果，所以必杀门槛是 3。他身上的美工刀<b>没有标签，算 0</b>；而且被偷袭的第一轮本来就不能使用凶器。合计 0。'},
+  {phase:2,check:true,cap:'<b>必杀判定</b>：九条的优势 +2，没有达到森的门槛 3，<b>必杀不成立</b>；森的 −2 也没达到九条的 3。'},
+  {phase:3,dice:{a:[6,3,2],b:[8]},cap:'必杀不成立，进入<b>死凶对决</b>。优势方掷 1d10＋优势数量的 d4，另一方掷 1d10。九条 11，森 8。'},
+  {phase:4,set:{b:{weak:1}},cap:'点数低的一方<b>虚弱 +1</b>：森的剩余门槛 3 → 2。'},
+  {phase:5,check:true,set:{b:{dead:true}},verdict:'必杀成立',cap:'<b>再判定一次</b>：九条 +2 达到森的门槛 2，必杀成立。如果森的美工刀有标签，这里会是 +1，结果就不一样了。'},
+  {phase:-1,extra:()=>X.box('痕迹结算 → 搜查线索',[['掷骰 1 轮','一处防御伤 → <em>右前臂的淤青</em>'],['【剑术】','才能留下的痕迹 → <em>脖子侧面的细长击打痕</em>'],['凶器【木刀】','被带走藏起 → <em>木刀架少了一把</em>'],['现场在仓库','樟脑丸袋子破了 → <em>外套上的白色粉末</em>']]),cap:'死亡后<b>结算痕迹</b>，这些就是搜查时找到的线索。'},
+  {phase:-1,extra:()=>X.tln('凶手的掩盖',[['仓库行凶','第一天夜间'],['搬到音乐室','伪装成摔落'],['藏起木刀','凶器可以移走'],['痕迹还在','只能伪装，不能抹去']],3),cap:'凶手可以掩盖，但<b>痕迹只能伪装，不能抹去</b>。接下来把判例一类一类看过。'}
+ ]}]};
+
+/* ===== 对决流程 ===== */
+const FLOW={id:'flow',type:'battle',kick:'判例',title:'对决流程',
+rules:[['流程',['① 核对资源 → ② 处理本轮效果 → ③ 必杀判定 → ④ 掷骰 → ⑤ 增加虚弱 → ⑥ 再次判定 → ⑦ 进入下一轮。','掷骰：优势方 1d10＋优势数量的 d4，另一方 1d10；优势为 0 时各掷 1d10。','点数低的一方虚弱 +1；平手不增加。','必杀成立就不会有任何后续判定，直接认定死亡。']]],
+cases:[
+ {name:'必杀成立',init:INIT({a:SA({hp:2,w:{n:'刀【切割】',v:1},t:{n:'【格斗】',v:1}}),b:SB({hp:2,w:{n:'美工刀（无标签）',v:0}})}),steps:[
+  {phase:0,cap:'A 用刀加战斗才能，合计 <b>2</b>。B 健康 0，必杀门槛只有 <b>2</b>。'},
+  {phase:1,extra:()=>X.noTag('刀【切割】','美工刀（没有标签）'),cap:'B 身上有美工刀，但<b>没有标签就算 0</b>；被偷袭的第一轮本来也不能使用凶器。合计 0，A 的优势是 +2。'},
+  {phase:2,check:true,set:{b:{dead:true}},verdict:'必杀成立',extra:()=>X.traceTable(0),cap:'A 的 +2 达到 B 的门槛 2，<b>触发必杀：不会有任何后续判定</b>。没有逐轮搏斗的痕迹，但刀伤与才能痕迹仍在。'}]},
+ {name:'掷骰与虚弱',init:INIT({a:SA({hp:3,w:{n:'刀【切割】',v:1}}),b:SB({hp:3,w:{n:'木棍【打击】',v:1}})}),steps:[
+  {phase:1,cap:'A 只有刀，合计 1。B 健康 2、门槛 3；被偷袭的第一轮不能使用凶器，合计 0。'},
+  {phase:2,check:true,cap:'A 的 +1 没达到 3，B 的 −1 也没达到 3，<b>必杀不成立，进入死凶对决</b>。'},
+  {phase:3,dice:{a:[7,2],b:[4]},cap:'A 掷 1d10＋1d4＝9，B 掷 1d10＝4。'},
+  {phase:4,set:{b:{weak:1}},cap:'B <b>虚弱 +1</b>，门槛 3 → 2。虚弱只降低自己的门槛，不会让对方多掷骰。'},
+  {phase:5,check:true,cap:'再判定一次：A 的 +1 还没达到 2，继续。'},
+  {phase:6,set:{first:false,round:2},cap:'<b>进入第二轮</b>：第一轮的限制解除，B 的木棍计入，双方合计 1 比 1，优势 0。'},
+  {phase:3,dice:{a:[5],b:[5]},verdict:'平手',vsoft:true,cap:'优势为 0 时双方各掷 1d10。<b>平手：谁都不增加虚弱</b>，直接进入下一轮。'}]},
+ {name:'自由试算',init:INIT({a:SA({hp:3,w:{n:'凶器',v:1},t:{n:'才能',v:1}}),b:SB({hp:3,w:{n:'凶器',v:1}})}),steps:[
+  {phase:-1,sandbox:true,cap:'自己试试看：调整双方的凶器、才能、机关、门槛与状态，按<b>「掷骰一轮」</b>。必杀判定会自动显示。'}]}
+]};
+
+/* ===== 凶器判例 ===== */
+const C_WEAPON={id:'weapon',type:'battle',kick:'判例',title:'凶器',
+rules:[['凶器',['道具拥有标签的情况，只要描述上符合主持人判断能当凶器即可使用。','大部分道具的标签在凶器算 1 优势；即使道具拥有两个标签，也只能填其中一个，并算 1 优势。','才能道具当凶器也一样，只能选一个标签。','没有被赋予标签的道具，算 0。','凶器选定之后，新的回合允许换凶器。','被当成凶器不会使用一次就损毁；但现场一定会留下痕迹。']],
+ ['射击',['拥有【射击】标签的凶器，优势为 2。','需要灵巧 2 或枪械相关才能，才可以使用枪械作为凶器；不满足资格，使用等于 0。','射击标签的道具，可以由灵巧 4 的玩家制作。','开枪必定留下枪声，以及弹道或弹壳。']]],
+cases:[
+ {name:'一览',init:INIT({a:SA({hp:2,w:{n:'刀【切割】',v:1}}),b:SB({hp:2,w:{n:'美工刀（无标签）',v:0}})}),steps:[
+  {phase:0,extra:X.weaponTbl,cap:'先看整体：<b>凶器格填的是道具的标签</b>，不是道具本身。下面逐一示范。'}]},
+ {name:'单标签',init:INIT({a:SA({hp:2,w:{n:'刀【切割】',v:1}}),b:SB({hp:3,w:{n:'雨伞【打击】',v:1}})}),steps:[
+  {phase:1,cap:'最基础的情况：<b>单标签道具</b>，标签填进凶器格，<b>优势 1</b>。'},
+  {phase:6,set:{first:false,round:2},cap:'第二轮，受袭方的凶器也能用了，双方都是 1。<b>只要描述上说得通能当凶器，主持人就会认可</b>。'}]},
+ {name:'双标签二选一',init:INIT({a:SA({hp:2,w:{n:'绳索【束缚】（另有【捆绑】）',v:1}}),b:SB({hp:3})}),steps:[
+  {phase:1,extra:()=>X.box('双标签道具',[['道具','绳索【束缚＋捆绑】'],['填入','两个标签<em>二选一</em>'],['优势','仍然是 1'],['原因','每一格只能填入一个标签']]),cap:'<b>双标签道具</b>：两个标签只能挑一个填进凶器格，<b>优势还是 1</b>，不会因为多功能变强。'}]},
+ {name:'才能道具',init:INIT({a:SA({hp:2,w:{n:'调香工具【调配】',v:1},t:{n:'【嗅觉鉴定】',v:0}}),b:SB({hp:3})}),steps:[
+  {phase:1,extra:()=>X.box('才能道具当凶器',[['凶器格','才能道具也只能<em>选一个标签</em>，优势 1'],['才能格','要填的是<em>标记为战斗的才能</em>，与道具无关'],['同类项','多个战斗才能只取一个'],['提醒','非战斗才能填不进才能格']]),cap:'<b>才能道具当凶器</b>：一样只能选一个标签，优势 1；才能格是另一件事，要填战斗才能。'}]},
+ {name:'枪械',init:INIT({a:SA({hp:2,w:{n:'手枪【射击】',v:2},t:{n:'【射术】',v:1}}),b:SB({hp:3})}),steps:[
+  {phase:1,cap:'<b>【射击】标签的凶器，优势为 2</b>。A 有枪械相关才能，可以使用，合计 3。'},
+  {phase:2,check:true,set:{b:{dead:true}},verdict:'必杀成立',extra:()=>X.box('开枪必定留下',[['枪声','全场都听得到'],['弹道或弹壳','现场一定找得到其中一项']]),cap:'B 第一轮合计 0，A 的 +3 达到门槛 3。开枪<b>必定留下两项痕迹</b>。'},
+  {phase:1,set:{a:{w:{n:'手枪（没有资格使用）',v:0},t:{n:'',v:0}},b:{dead:false}},extra:()=>X.box('没有资格的枪',[['需求','灵巧 2 以上，或枪械相关才能'],['不满足','拿着也不会用'],['优势','<em>等于 0</em>'],['制作','带【射击】的道具由灵巧 4 制作']]),cap:'换成<b>没有资格的人拿枪</b>：灵巧不到 2、也没有枪械才能，<b>使用等于 0</b>。'}]},
+ {name:'换凶器与痕迹',init:INIT({first:false,round:2,a:SA({hp:2,w:{n:'刀【切割】',v:1}}),b:SB({hp:3,w:{n:'木棍【打击】',v:1}})}),steps:[
+  {phase:6,cap:'<b>凶器选定之后，新的回合允许换凶器</b>：手上还有别的道具，下一轮可以改用。'},
+  {phase:6,set:{round:3,a:{w:{n:'铁棍【打击】',v:1}}},extra:()=>X.box('换凶器的规则',[['可以换','新的回合可以改用身上其他道具'],['不会损毁','被当成凶器<em>不会使用一次就损坏</em>'],['但是','现场<em>一定会留下痕迹</em>'],['所以','换过几种凶器，就会留下几种痕迹']]),cap:'第三轮 A 换成铁棍。凶器<b>不会因为使用就损毁</b>，但<b>现场一定会留下痕迹</b>，换得越多，线索越多。'}]}
+]};
+
+/* ===== 预判 ===== */
+const C_FORE={id:'fore',type:'battle',kick:'判例',title:'预判',
+rules:[['预判',['死者被偷袭时，第一轮是没办法使用凶器；但如果有【预判】的才能，就可以在第一轮就使用凶器反击。','【预判】只能由才能获得，没有道具版。','在计算必杀的时候，死者方会被判定是拿着武器。','身上如果有复数武器，拥有预判的死者方可以自行挑选，要使用身上哪一个道具当凶器。','【预判】不能填进才能格。']]],
+cases:[
+ {name:'预判',init:INIT({a:SA({hp:3,w:{n:'刀【切割】',v:1},t:{n:'【格斗】',v:1}}),b:SB({hp:3,w:{n:'木刀【打击】',v:1},fore:true})}),steps:[
+  {phase:1,extra:()=>X.box('【预判】',[['来源','只能由<em>才能</em>获得，没有道具版'],['效果','受到偷袭时，第一轮就能使用凶器反击'],['必杀计算','死者方会被判定是<em>拿着武器</em>的状态'],['才能格','【预判】本身不能填进才能格']]),cap:'B 有<b>【预判】</b>：被偷袭时，<b>计算必杀时会被判定成拿着武器</b>，第一轮就能反击。'},
+  {phase:2,check:true,cap:'A 合计 2，B 合计 1，A 的优势只有 +1，没达到 B 的门槛 3。<b>没有预判的话，A 会是 +2</b>，差一格就是生死。'},
+  {phase:1,set:{b:{w:{n:'铁棍【打击】（自选）',v:1}}},extra:()=>X.box('复数武器怎么选',[['情况','死者身上带着两件以上的道具'],['权利','拥有预判的<em>死者方自行挑选</em>'],['时机','偷袭的那一轮就要决定'],['限制','一样只能挑一个标签填进凶器格']]),cap:'身上有<b>复数武器</b>时，拥有预判的死者<b>可以自己挑</b>要用哪一件当凶器。'}]}
+]};
+
+/* ===== 机关与解除 ===== */
+const C_TRAP={id:'trap',type:'battle',kick:'判例',title:'机关与解除',
+rules:[['机关',['拥有【机关】标签的道具，可以把另一个标签填入机关格，例如陷阱绳网【机关＋束缚】；所以至少要双标签道具。','机关是一次性道具，使用完会直接损坏，下回合无法使用。','拥有机关标签的道具，哪怕拥有三标签，也不能同时当凶器跟机关使用，只能选一个；但凶器不会损坏，因为案件还要用。','机关的道具不管大小与复杂程度都只算一个：一整栋大楼是一个机关，超复杂的机械也是一个机关，它只是一种功能叙述。','机关不能在死者方填入。']],
+ ['解除',['需要【解除】＋另一个标签，才能在死者方填入机关格，获得优势 1。','同理，凶器与机关只能选一个填。','解除的道具也是使用一次就损坏。','解除的道具不能用在凶手方。']]],
+cases:[
+ {name:'机关',init:INIT({a:SA({hp:2,w:{n:'刀【切割】',v:1},t:{n:'【格斗】',v:1},m:{n:'陷阱绳网【束缚】',v:1}}),b:SB({hp:4,w:{n:'铁锹【打击】',v:1},t:{n:'【攀爬】',v:1},block:true})}),steps:[
+  {phase:1,extra:()=>X.box('机关怎么填',[['道具','陷阱绳网<em>【机关＋束缚】</em>'],['填入','【机关】本身不能填，填的是另一个标签【束缚】'],['所以','至少要<em>双标签</em>道具'],['优势','1']]),cap:'A 事先准备了<b>【机关＋束缚】</b>的双标签道具：填进机关格的是【束缚】，<b>【机关】本身只是资格</b>。A 合计 3。'},
+  {phase:1,cap:'绳网把 B 绑住，触发 B 的<b>限制条件</b>，才能格无法使用；第一轮凶器也不能用，B 合计 0。'},
+  {phase:6,set:{first:false,round:2,a:{m:{n:'（已损坏）',v:0}}},extra:()=>X.box('一次性',[['使用后','机关道具<em>直接损坏</em>'],['下回合','无法再使用同一个机关'],['要继续','就得事先准备第二个机关'],['痕迹','每次触发都会留下痕迹']]),cap:'下一轮：<b>机关是一次性道具，使用完就损坏</b>，下回合无法使用。'}]},
+ {name:'不能同时当凶器',init:INIT({a:SA({hp:2,w:{n:'（空手）',v:0},t:{n:'【格斗】',v:1},m:{n:'铁丝装置【绞紧】',v:1}}),b:SB({hp:3})}),steps:[
+  {phase:1,extra:()=>X.box('三标签也只能选一个',[['道具','铁丝装置【机关＋绞紧＋切割】'],['选择','当凶器<em>或</em>当机关，<em>只能选一个</em>'],['当机关','用完就损坏'],['当凶器','不会损坏，因为案件还要用']]),cap:'A 的铁丝装置有三个标签，但<b>不能同时当凶器跟机关</b>，只能选一个。这次选机关，凶器格就空着。'},
+  {phase:1,set:{a:{w:{n:'铁丝装置【切割】',v:1},m:{n:'',v:0}}},cap:'改成<b>当凶器</b>：机关格空着，凶器格 1。差别在于——<b>凶器不会损坏</b>，案件之后还要用它来演。'},
+  {phase:1,extra:()=>X.box('规模不影响优势',[['一条绳索','一个机关，优势 1'],['一整栋大楼','一个机关，优势 1'],['超复杂的机械','一个机关，优势 1'],['原因','机关只是一种功能叙述，不是规模比拼']]),cap:'另外，<b>机关不管大小与复杂程度</b>：把整栋大楼做成机关，也只算一个机关。'}]},
+ {name:'解除',init:INIT({a:SA({hp:2,w:{n:'刀【切割】',v:1},t:{n:'【格斗】',v:1},m:{n:'陷阱绳网【束缚】',v:1}}),b:SB({hp:4,w:{n:'铁锹【打击】',v:1},t:{n:'【攀爬】',v:1}})}),steps:[
+  {phase:1,set:{b:{m:{n:'小刀【切割】',v:1}}},extra:()=>X.box('解除怎么填',[['道具','小刀<em>【解除＋切割】</em>'],['填入','【解除】是资格，填的是另一个标签【切割】'],['位置','只有<em>死者方</em>能填进机关格'],['优势','1，用来反制对方的机关']]),cap:'B 拿出<b>【解除＋切割】</b>的双标签道具，把【切割】填进机关格，<b>优势 1</b>，抵掉 A 的机关差距。'},
+  {phase:2,check:true,cap:'A 合计 3、B 合计 1，A 的优势 +2，没达到 B 的门槛 4（超级强壮）。对决继续。'},
+  {phase:6,set:{first:false,round:2,a:{m:{n:'（已损坏）',v:0}},b:{m:{n:'（已损坏）',v:0}}},extra:()=>X.box('两边都是一次性',[['机关','使用一次就损坏'],['解除','使用一次就损坏'],['凶器与机关','同一件道具只能选一个填'],['方向限制','机关只在凶手方，解除只在死者方']]),cap:'下一轮：<b>解除的道具也是用一次就损坏</b>。另外记住方向：<b>机关只能凶手方填，解除只能死者方填</b>。'}]}
+]};
+
+/* ===== 下毒 ===== */
+const C_POISON={id:'poison',type:'battle',kick:'判例',title:'下毒',
+rules:[['下毒',['麻痺、安眠、即死、延迟死等，所有相关效果都属于中毒标签。','非致死性药物，药效只照叙事，不开启对抗。','药物将触发致死时：一样进行必杀判定，此时死者方的凶器、才能等抵抗暂时无效，只剩下健康门槛保留，并且中毒状态算一层虚弱（门槛 −1），以此裁定是否满足必杀。','下毒必杀不成立：受袭方醒来，身上的道具才能等全部恢复，设定为健康打败了毒性，保留中毒 debuff，进入对决。','此时如果身上有解药的道具，才会自动使用，解除中毒。','死者方如果昏迷期间被搜身，即使拿走死者原有的道具，当必杀不成立的时候，死者也会立刻醒来，并且道具都会默认回到死者方身上；但如果是在动手前完成的偷窃，有效。','裁定的原则就是：死者失去操控权到死亡的这段时间，凶手的操作都不影响死凶对决的裁定。','中毒可以与其他道具合成，等于隐藏下毒；合成后会隐藏，除非有特定才能或检查工具才能发现，标准很严苛。','被别人误食且为致死效果时，一样强制进入死凶对决。']]],
+cases:[
+ {name:'日常下毒',init:INIT({a:SA({hp:2,w:{n:'刀【切割】',v:1}}),b:SB({hp:3,w:{n:'美工刀【切割】',v:1},t:{n:'【柔道】',v:1},drugged:true})}),steps:[
+  {phase:-1,extra:()=>X.chat('日常　第二天午间　食堂',[['gm','主持人','午间时段，食堂。柊由纪替大家泡了茶。'],['me','A（后台）','我要在森的那杯茶里放东西。'],['gm','主持人','收到，这是隐密处理，前台不会有讯息。']],'下毒是从日常开始的：在日常的行动里取得下手机会，主持人在后台处理，前台什么都看不到。'),cap:'<b>下毒从日常讲起</b>：在日常取得接触食物的机会，后台私下宣告，前台不会有任何讯息。'},
+  {phase:-1,extra:()=>X.box('中毒标签包含什么',[['麻痺','属于中毒标签'],['安眠','属于中毒标签'],['即死','属于中毒标签'],['延迟死','属于中毒标签']]),cap:'麻痺、安眠、即死、延迟死，<b>所有这类效果都属于中毒标签</b>。'},
+  {phase:-1,cap:'如果是<b>非致死性药物</b>，药效只照叙事处理：睡着、麻痺、动不了，<b>不开启对抗</b>。'}]},
+ {name:'致死时的判定',init:INIT({a:SA({hp:2,w:{n:'刀【切割】',v:1}}),b:SB({hp:3,w:{n:'美工刀【切割】',v:1},t:{n:'【柔道】',v:1},drugged:true,poison:true})}),steps:[
+  {phase:1,cap:'药物将触发致死时，<b>一样进行必杀判定</b>。此时死者方的凶器、才能等抵抗<b>暂时无效</b>，只剩下健康门槛。'},
+  {phase:1,extra:()=>X.box('中毒的数值',[['中毒状态','算一层虚弱'],['效果','死者的门槛 <em>−1</em>'],['这场','健康 2 → 门槛 3 → <em>剩余 2</em>'],['凶手','照常填自己的凶器、才能、机关']]),cap:'中毒状态算一层虚弱，<b>死者的门槛 −1</b>：3 变成 2。'},
+  {phase:2,check:true,cap:'A 的优势 +1 没有达到 2，<b>必杀不成立</b>。如果这里成立，死者就直接死亡，不会有后续。'}]},
+ {name:'醒来与解药',init:INIT({a:SA({hp:2,w:{n:'刀【切割】',v:1}}),b:SB({hp:3,w:{n:'美工刀【切割】',v:1},t:{n:'【柔道】',v:1},poison:true})}),steps:[
+  {phase:1,cap:'必杀不成立：<b>受袭方醒来</b>，身上的道具、才能全部恢复，设定为<b>健康打败了毒性</b>，但<b>保留中毒</b>，进入死凶对决。'},
+  {phase:1,set:{b:{antidote:true}},extra:()=>X.box('解药的唯一时机',[['不是真的解毒','它是特殊道具标签'],['触发','凶手必杀失败、死凶对决发生时'],['动作','身上带解药的道具<em>自动使用</em>'],['效果','解除自己身上的中毒，门槛回到 3']]),cap:'<b>此时有解药的道具，才会自动使用</b>，解除中毒，门槛回到 3。除此之外，解药没有其他效果。'},
+  {phase:-1,extra:()=>X.box('昏迷期间被搜身',[['凶手拿走道具','必杀不成立时，死者醒来'],['结果','道具<em>默认回到死者身上</em>'],['例外','动手<em>之前</em>完成的偷窃有效'],['原则','死者失去操控权到死亡这段时间，凶手的操作都不影响裁定']]),cap:'昏迷期间被搜身也不影响裁定：<b>死者失去操控权到死亡的这段时间，凶手的操作都不算数</b>。'}]},
+ {name:'隐藏与误食',init:INIT({a:SA({hp:2}),b:SB({hp:2,poison:true,drugged:true})}),steps:[
+  {phase:-1,extra:()=>X.box('合成隐藏',[['做法','中毒可以与其他道具合成'],['效果','等于隐藏下毒，毒性不会被看出来'],['发现','要有特定的才能或检查工具，标准很严苛'],['理由','中毒很可能直接触发死凶对决']]),cap:'中毒<b>可以和其他道具合成</b>，等于隐藏下毒；要发现它，需要特定才能或检查工具，标准很严苛。'},
+  {phase:-1,extra:()=>X.box('误食',[['安眠、麻药','照叙事处理，不开对抗'],['致死效果','<em>强制进入死凶对决</em>'],['就算','凶手根本没想到会被别人吃掉'],['对决双方','下毒的人与误食的人']]),cap:'下毒的物品被别人误食：安眠、麻药不管，<b>致死效果一样强制进入死凶对决</b>。'}]}
+]};
+
+/* ===== 环境与痕迹 ===== */
+const C_ENV={id:'envtrace',type:'battle',kick:'判例',title:'环境与痕迹',
+rules:[['环境',['环境是特殊状态，不能进入凶器＋才能＋机关。','有对应的才能或道具可以免除。','极端环境能用什么方法规避，都需要先标注；环境的效果由主持人决定。']],
+ ['痕迹',['掷骰 0 轮没有搏斗痕迹；1 轮一处防御伤或一件物品移位；2 轮家具明显移位、多处血迹；3 轮以上现场混乱，存活方身上留下可见痕迹。','射击会留下枪声与弹道或弹壳；战斗才能留下指向持有者的痕迹；凶器不会自动损毁。','使用机关道具会留下痕迹。','共犯、多人中毒、大型机关波及多人，由主持人裁定。']]],
+cases:[
+ {name:'环境',init:INIT({env:'水中',a:SA({hp:2,w:{n:'刀【切割】',v:1}}),b:SB({hp:3,t:{n:'【潜水】',v:1}})}),steps:[
+  {phase:1,extra:()=>X.box('环境',[['特殊状态','不能进入凶器＋才能＋机关'],['影响','可能是双方，也可能只有一方'],['免除','有对应的才能或道具'],['事先标注','极端环境能用什么方法规避，都要先写在场景资料上']]),cap:'水中、低温、积雪这类<b>环境是特殊状态</b>，不能进入凶器＋才能＋机关。'},
+  {phase:1,extra:()=>X.box('环境',[['效果','由主持人依场景决定'],['为什么要先标注','让凶手能事先规划地点，死者也有机会准备'],['对应手段','才能或道具都可以'],['示范','B 有【潜水】，水中对他没有影响']]),cap:'效果由主持人依场景决定；<b>能用什么方法规避，都需要事先标注</b>。'}]},
+ {name:'痕迹结算',init:INIT({a:SA({hp:2,w:{n:'刀【切割】',v:1},t:{n:'【格斗】',v:1}}),b:SB({hp:2,dead:true})}),steps:[
+  {phase:-1,extra:()=>X.traceTable(-1),cap:'死亡后，依<b>掷骰的轮数</b>整理现场。'},
+  {phase:-1,extra:()=>X.box('一定会留下的痕迹',[['射击','枪声，以及弹道或弹壳'],['战斗才能','指向持有者的痕迹'],['机关','使用机关道具会留下痕迹'],['凶器','不会自动损毁，之后可以移走或藏起']]),cap:'有些痕迹<b>一定会留下</b>，凶手能做的只有伪装它的意义。'}]}
+]};
+
+/* ===== 结果裁定 ===== */
+const RESULTS={id:'results',type:'battle',kick:'死凶对决',title:'结果裁定',
+rules:[['死凶对决的结果裁定',[
+ '死凶对决必死一人：对决开启后，和解、停手、道具用完、主持人喊停都不能结束。死凶对决本身是对三方的保护以及惩罚，因此一旦触发，基本上只能以死人为结束。',
+ '如果双方同时符合必杀条件，则一起死亡。优势与门槛都可以是负数；门槛 0 不代表自动死亡。',
+ '如果死者达成逃脱，那就会默认凶手重伤死亡；逃脱行为的裁定方式与反击相同，因此不例外设定规则。',
+ '死者如果在死凶对决中胜出，则他会反过来成为凶手，此时就需要主持人帮忙如何设计后续案件。',
+ '如果出现第三方闯入，死凶对决继续；但如果此时三方都同意停手，那可以停止死凶对决，具体由主持人裁定。',
+ '双方远程的情况下一样对决，输的人死亡。如果两边处境很远，没办法杀死对方，则输的一方会直接被加上 2 层虚弱，并且自动去寻找最近的玩家，强制开启死凶对决。',
+ 'A 操作 B 去杀 C：B 与 C 进行死凶对决，C 赢了的话，A、B 都死。',
+ 'A 下毒，让不知情的 B 把毒物交给 C：由 A 与 C 进行死凶对决；凶手是谁规则不管，看主持人。']]],
+cases:[
+ {name:'必死一人',init:INIT({first:false,round:3,a:SA({hp:3,weak:1,w:{n:'刀【切割】',v:1}}),b:SB({hp:3,weak:1,w:{n:'木棍【打击】',v:1}})}),steps:[
+  {phase:-1,extra:()=>X.box('不能结束对决的做法',[['和解','不行'],['停手','不行'],['道具用完','空手继续'],['主持人喊停','不行']]),cap:'<b>死凶对决一旦开启，必定有一方死亡。</b>'},
+  {phase:-1,extra:()=>X.box('为什么这么硬',[['保护死者','凶手不能想杀就杀，得付出代价'],['保护凶手','主持人不能临时改结果'],['惩罚','准备不足就动手的人，很可能自己死'],['所以','一旦触发，基本上只能以死人为结束']]),cap:'死凶对决本身<b>是对三方的保护，也是惩罚</b>，所以不给中途退场的空间。'}]},
+ {name:'同时死亡',init:INIT({first:false,round:4,a:SA({hp:2,weak:3,w:{n:'刀【切割】',v:1},t:{n:'【格斗】',v:1}}),b:SB({hp:2,weak:1,w:{n:'木棍【打击】',v:1}})}),steps:[
+  {phase:5,cap:'打了几轮之后：A 合计 2、B 合计 1。A 已经虚弱 3 层，剩余门槛 <b>−1</b>；B 剩余门槛 1。'},
+  {phase:5,check:true,set:{a:{dead:true},b:{dead:true}},verdict:'同时死亡',extra:()=>X.box('日常上会发生什么',[['两个人都死','现场变成双尸案件'],['案件','由主持人与两边玩家一起收尾'],['学裁','照样进行，讨论谁先动的手'],['规则','双方同时符合必杀条件，则一起死亡']]),cap:'A 的 +1 达到 B 的 1；B 的 −1 也达到 A 的 −1，<b>一起死亡</b>。优势与门槛都可以是负数。'},
+  {phase:5,check:true,set:{a:{dead:false,weak:2},b:{dead:false,weak:0}},cap:'<b>门槛 0 不代表自动死亡</b>：A 门槛 0、B 门槛 2 时，B 的 −1 没达到 0，A 的 +1 也没达到 2，对决继续。'}]},
+ {name:'反杀',init:INIT({first:false,round:3,a:SA({hp:2,weak:1,w:{n:'刀【切割】',v:1}}),b:SB({hp:3,w:{n:'木棍【打击】',v:1}})}),steps:[
+  {phase:6,cap:'对决打到第三轮，A 已经虚弱 1 层，门槛剩 1。双方合计 1 比 1。'},
+  {phase:3,dice:{a:[3],b:[8]},cap:'这一轮 A 掷输了。'},
+  {phase:4,set:{a:{weak:2}},cap:'<b>行凶方一样会虚弱</b>：A 的门槛降到 0。'},
+  {phase:5,check:true,set:{a:{dead:true}},verdict:'反杀',cap:'B 的优势 0 达到 A 的门槛 0：<b>行凶方被反杀</b>。'},
+  {phase:-1,extra:()=>X.tln('反杀之后的日常操作',[['对决结束','原本的凶手死亡'],['身分互换','死者<em>反过来成为凶手</em>'],['后台','主持人找反杀者私聊'],['一起设计','案件与掩盖，接着照常进入搜查']],2),cap:'死者在对决中胜出，<b>他会反过来成为凶手</b>；主持人要在后台帮他把后续案件设计出来。'}]},
+ {name:'逃脱',init:INIT({first:false,round:2,a:SA({hp:3,w:{n:'刀【切割】',v:1}}),b:SB({hp:3,weak:1,w:{n:'木棍【打击】',v:1}})}),steps:[
+  {phase:-1,extra:()=>X.tln('逃脱的流程',[['死者宣告','我要逃'],['判定','与反击走<em>同一套</em>对决判定'],['成功','死者脱离现场'],['结果','<em>凶手默认重伤死亡</em>']],1),cap:'死者想跑，就<b>用同一套对决判定</b>，不另外设规则。'},
+  {phase:-1,set:{a:{dead:true}},verdict:'逃脱',vsoft:true,extra:()=>X.box('为什么凶手会死',[['行凶失败','现场留下大量痕迹与目击'],['规则','达成逃脱＝<em>凶手默认重伤死亡</em>'],['案件','变成凶手自己的尸体'],['提醒','这就是准备不足就动手的代价']]),cap:'一旦死者达成逃脱，<b>凶手默认重伤死亡</b>。'}]},
+ {name:'第三方闯入',init:INIT({first:false,round:2,a:SA({hp:3,w:{n:'刀【切割】',v:1}}),b:SB({hp:3,weak:1,w:{n:'木棍【打击】',v:1}})}),steps:[
+  {phase:-1,extra:()=>X.chat('日常上怎么发生',[['gm','主持人','同一个时段，第三名玩家也选了这个地点。'],['pc','闯入者','……你们在做什么？'],['gm','主持人','对决继续。三方都同意停手的话，我才会喊停。']],'第三方闯入不是自动中断：预设是对决继续进行。'),cap:'第三方闯入通常是<b>行动时段撞在同一个地点</b>。预设情况下，<b>死凶对决继续</b>。'},
+  {phase:-1,verdict:'中断',vsoft:true,extra:()=>X.box('停手的条件',[['行凶方','同意'],['受袭方','同意'],['闯入者','同意'],['结果','可以停止，具体由主持人裁定；虚弱与痕迹保留']]),cap:'只有<b>三方都同意停手</b>，才可以停止死凶对决，具体由主持人裁定。'}]},
+ {name:'远程与距离',init:INIT({first:false,round:2,a:SA({hp:3,w:{n:'弓【射穿】',v:1}}),b:SB({hp:3,w:{n:'投石【打击】',v:1}})}),steps:[
+  {phase:-1,extra:()=>X.chat('日常上怎么发生',[['gm','主持人','两人在不同地点，用远程手段互相攻击。'],['me','A（后台）','我从天台射他。'],['gm','主持人','对方也在还手，一样进入死凶对决。']],'双方远程的情况下一样对决，输的人死亡。'),cap:'双方远程<b>一样对决，输的人死亡</b>。'},
+  {phase:4,set:{a:{weak:2}},verdict:'距离过远',vsoft:true,extra:()=>X.tln('距离太远时',[['对决结束','分出输赢'],['但是','两边处境很远，<em>没办法杀死对方</em>'],['输的一方','直接被加上 <em>2 层虚弱</em>'],['接着','自动去寻找<em>最近的玩家</em>，强制开启死凶对决']],3),cap:'如果两边处境很远、<b>没办法杀死对方</b>：输的一方<b>直接被加上 2 层虚弱</b>。'},
+  {phase:-1,extra:()=>X.box('等于把死亡传递出去',[['自动寻找','地图上最近的玩家'],['强制开启','新的死凶对决'],['状态','带着两层虚弱上场，门槛 −2'],['结果','通常就是这名玩家死，案件从这里开始']]),cap:'接着，输的一方<b>自动去寻找最近的玩家，强制开启死凶对决</b>。带着两层虚弱去打，等于把死亡传递出去。'}]},
+ {name:'操控他人',init:INIT({a:SIDE({name:'B（被操控）',role:'行凶方',c:'#8a4fd8',s:'B',hp:2,w:{n:'刀【切割】',v:1}}),b:SIDE({name:'C',role:'受袭方',c:'#3d7bff',s:'C',hp:2,t:{n:'【格斗】',v:1},fore:true,w:{n:'铁棍【打击】',v:1}})}),steps:[
+  {phase:-1,extra:()=>X.chat('日常上怎么发生',[['gm','主持人','A 在日常说服了 B，让 B 去找 C。'],['me','A（后台）','我不出手，让他去。'],['gm','主持人','实际动手的是 B，对决就在 B 与 C 之间。']],'A 操作 B 去杀 C：对决在实际动手的两人之间进行，A 不上场。'),cap:'<b>A 操作 B 去杀 C</b>：对决在实际动手的 B 与 C 之间进行，A 不上场。'},
+  {phase:2,check:true,cap:'C 有【预判】，第一轮就能反击：C 合计 2、B 合计 1。双方都没达到对方的门槛 2，进入死凶对决。'},
+  {phase:3,dice:{a:[4],b:[9,2]},cap:'C 有 +1 优势，掷 1d10＋1d4；B 掷 1d10。这一轮 B 输了。'},
+  {phase:4,set:{a:{weak:1}},cap:'B <b>虚弱 +1</b>，剩余门槛 2 → 1。'},
+  {phase:5,check:true,set:{a:{dead:true}},verdict:'C 获胜',extra:()=>X.box('C 赢了之后',[['B','死亡'],['A','<em>一起死亡</em>，即使他人不在现场'],['理由','是他让这场对决发生的'],['凶手是谁','规则不管，由主持人依剧本认定']]),cap:'C 的 +1 达到 B 的门槛 1。<b>C 赢了的话，A、B 都死</b>。'}]},
+ {name:'不知情转交',init:INIT({a:SIDE({name:'A（下毒者）',role:'行凶方',c:'#f0167d',s:'A',hp:2}),b:SIDE({name:'C（误食者）',role:'受袭方',c:'#3d7bff',s:'C',hp:2,poison:true,drugged:true,w:{n:'美工刀【切割】',v:1},t:{n:'【柔道】',v:1}})}),steps:[
+  {phase:-1,extra:()=>X.chat('日常上怎么发生',[['me','A（后台）','我把毒放进这盒点心，交给 B。'],['pc','B','这盒点心分你吃吧。'],['pc','C','谢啦。']],'B 完全不知情，只是转交的人，不会进入对决。'),cap:'<b>A 下毒，让不知情的 B 把毒物交给 C</b>。B 只是搬运的人，不进入对决。'},
+  {phase:2,check:true,cap:'致死时，<b>由 A 与 C 进行死凶对决</b>。C 被下毒，才能与道具都不能使用，只能用健康对抗，中毒再算一层虚弱：门槛 2 → 1。'},
+  {phase:-1,extra:()=>X.box('这场的结果',[['必杀判定','A 没有其他标签，优势 0 没达到 1'],['不成立','C 醒来，道具与才能恢复，保留中毒'],['继续','双方进入死凶对决'],['凶手是谁','规则不管，看主持人']]),cap:'必杀不成立，C 醒来，双方继续对决。<b>凶手是谁，规则不管，看主持人</b>。'}]}
+]};
+
+/* ===== 附录 ===== */
+const tbl=(head,rows,cls)=>`<div class="tblwrap"><table class="tbl"><tr>${head.map(h=>`<th>${h}</th>`).join('')}</tr>${rows.map(r=>`<tr>${r.map((c,i)=>`<td class="${(cls&&cls[i])||''}">${c}</td>`).join('')}</tr>`).join('')}</table></div>`;
+const APX_TABS=[
+ ['背景标签',()=>tbl(['分类','标签'],[['出身','孤儿、财阀、单亲、流浪、寄养、世家'],['组织','师承、机构、教团、社团、帮派、军警'],['事件','事故、失踪、顶替、背叛、救命、隔绝'],['关系','血亲、挚友']],['k'])+`<ul class="pts" style="margin-top:12px"><li>三个羁绊栏共用这份标签库，差别只在填进哪一栏。</li><li>【隔绝】涵盖失忆、囚禁、被藏匿、记忆遭窜改；【机构】刻意保持模糊，研究所、医院、实验设施都算。</li><li>这是参考样本，可以自创；主持人开团前可依世界观增删。</li></ul>`],
+ ['才能与道具标签',()=>tbl(['标签','属于','效果'],[['【预判】','特殊才能','受到偷袭时，第一轮可以使用武器对抗；必杀计算时被判定为拿着武器，复数武器可自选。此为唯一用途。'],['【制作】','特殊才能','把两个带标签的道具合成为双标签道具，需材料与时间。此为唯一用途。'],['【射击】','道具（枪械）','凶器优势 2；需灵巧 2 或枪械才能才可使用，不满足等于 0；道具由灵巧 4 制作。'],['【机关】','道具','解锁机关格：把另一个标签填进机关格，优势 1；至少双标签，使用一次即损坏，只有凶手方能填。'],['【解除】','道具','死者方反制机关：把另一个标签填进机关格，优势 1；至少双标签，使用一次即损坏。'],['【中毒】','道具','麻痺、安眠、即死、延迟死都属于此标签；可合成隐藏；致死时强制进入死凶对决。'],['【解毒】','道具','凶手必杀失败、死凶对决发生时自动使用，解除自己身上的中毒；除此之外没有其他效果。']],['k'])],
+ ['属性解锁',()=>tbl(['属性','点数','解锁'],[['健康','−1','【病弱】必杀门槛 1，自由点 +2'],['健康','0～1','必杀门槛 2'],['健康','2～3','【强壮】必杀门槛 3'],['健康','4','【超级强壮】必杀门槛 4'],['灵巧','0～4','携带量＝灵巧＋1'],['灵巧','2','改造物品、加入【机关】、合成双标签；可使用枪械'],['灵巧','3','有原料时制作【解毒】【中毒】'],['灵巧','4','最多三标签的道具、制作带【射击】的枪械'],['聪慧','1／2／3／4','提问 1／3／3／5 次'],['聪慧','1','【逻辑深潜】'],['聪慧','2','【观察眼】'],['聪慧','3','【右脑解放】'],['聪慧','4','【闪耀字谜】'],['魅力','2','【华丽谢幕】'],['魅力','全场唯一最高（2 以上）','【超级无敌美丽】，须主持人确认']],['k','n'])],
+ ['剧情点购买表',()=>`<h3 class="h3">奖励参考</h3>`+tbl(['表现','点数'],[['零星的小表现','1～3'],['完美的 RP','5'],['学裁中一个话题的良好议论','5'],['极度精彩的演出','10']],['','n'])+
+   `<h3 class="h3" style="margin-top:18px">道具与成长</h3>`+tbl(['项目','点数','备注'],[['无标签道具','0','不影响规则的普通物品；当凶器时优势为 0'],['单标签道具','3','依物品效果使用'],['枪械道具','5','带【射击】，凶器优势 2；使用须枪械才能或灵巧 2 以上'],['药物道具','5','一种基础药效，具体由主持人提供'],['双标签道具','10','机关、解除都需要双标签道具'],['特殊标签材料、三标签道具','主持人定价','仍须符合加工与材料条件'],['自由属性点 1 点','10','扩充规则；幕间限定，每章最多一次']],['k','n'])+
+   `<h3 class="h3" style="margin-top:18px">场景、剧情与行动</h3>`+tbl(['项目','点数','效果'],[['投放新场景或房间','3','新章节开始前申请；新地图开始后只有凶手可以追加'],['投放事件','5','团体或单独活动皆可，申请者大概率成为焦点'],['个人剧情道具','5','指定一人，投放属于对方的剧情道具；地点不公开'],['个人剧情事件','10','指定一人，触发一次属于对方的剧情事件'],['主线剧情道具','10','地点不公开，可能被别人捡走'],['主线剧情事件','20','触发一次主线剧情，申请者大概率成为焦点'],['才能教室','20','指定一人制作才能场景，保底含才能专属道具与剧情事件'],['主视角机位','20','指定一人，下一个事件大概率以他为主角；不保证生效'],['隐密行动','5','下一次行动进入隐密结算'],['隐密行动（凶手特供）','打折，主持人定价','凶手专用版本，有打折优惠，要买要快']],['k','n'])+
+   `<p class="mini">以上为参考价格，主持人可依自己的团调整。购买的道具不会直接给玩家，而是合理地投放在地图上，要亲自去拿。</p>`]
+];
+const S_APX={id:'appendix',type:'appendix',kick:'查阅',title:'附录',rules:[],steps:[{cap:'附录：<b>参考标签一览</b>与<b>剧情点购买表</b>，跑团时随时回来查。'}]};
+/* ===== 引擎 ===== */
+const SEGS=[S_INTRO,S_TALENT,S_ATTR,S_BOND,S_SELF,S_DAILY,S_INVEST,S_TRIAL,KILLER,FLOW,C_WEAPON,C_FORE,C_TRAP,C_POISON,C_ENV,RESULTS,S_APX];
+const count=g=>g.type==='battle'?g.flat.length:g.steps.length;
+let MODE='gm', VIEW=[];
+function buildView(){
+  VIEW=SEGS.map(g=>{
+    if(g.type==='battle'){
+      const cases=g.cases.map(c=>Object.assign({},c,{steps:c.steps.filter(s=>MODE==='gm'||!s.gm)})).filter(c=>c.steps.length);
+      const flat=[]; cases.forEach((c,ci)=>c.steps.forEach((s,si)=>flat.push({ci,si})));
+      return Object.assign({},g,{cases:cases,flat:flat});
+    }
+    return Object.assign({},g,{steps:g.steps.filter(s=>MODE==='gm'||!s.gm)});
+  }).filter(g=>count(g)>0);
+  buildMenu();
+}
+function buildMenu(){
+  const sheetLink=`<a class="menu-out" href="../character/" target="_blank" rel="noopener"><small>附录</small><b>人物卡模板</b></a>`;
+  $('#menu').innerHTML=VIEW.map((g,i)=>`<button type="button" data-seg="${i}"><small>${g.kick}</small><b>${g.title}</b></button>`).join('')+sheetLink;
+  $$('#menu [data-seg]').forEach(b=>b.addEventListener('click',()=>go(+b.dataset.seg,0)));
+}
+function setMode(m){
+  if(m===MODE) return;
+  const id=VIEW[SEG]?VIEW[SEG].id:null, st=STEP;
+  MODE=m; try{localStorage.setItem(KEY+'-mode',m);}catch(e){}
+  $$('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.getAttribute('data-mode')===MODE)));
+  buildView();
+  let i=VIEW.findIndex(g=>g.id===id); if(i<0) i=0;
+  MOUNTED=-1; closePanels();
+  go(i,Math.min(st,count(VIEW[i])-1),false);
+}
+const RM=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+const scene=$('#scene');
+let SEG=0,STEP=0,MOUNTED=-1,BUSY=false,ANIM=false,RUN=0;
+const wait=ms=>{const id=RUN;return new Promise(r=>setTimeout(()=>r(id===RUN),RM?0:ms));};
+const clone=o=>JSON.parse(JSON.stringify(o));
+const KEY='drtrpg-guide-v1';
+var READ=(function(){try{return new Set(JSON.parse(localStorage.getItem(KEY+'-read')||'[]'));}catch(e){return new Set();}})();
+function markRead(id){ READ.add(id); try{localStorage.setItem(KEY+'-read',JSON.stringify(Array.from(READ)));}catch(e){} }
+
+/* ---- 对话讯息 ---- */
+function msgHTML(m){
+  switch(m.t){
+    case 'sys': return `<div class="m-sys">${m.x}</div>`;
+    case 'gm': return `<div class="msg gm"><span class="av">主</span><div class="bd"><div class="nm">主持人</div><div class="tx">${m.x}</div></div></div>`;
+    case 'me': return `<div class="msg me"><span class="av" style="--c:${PC.shiori.c}">${PC.shiori.s}</span><div class="bd"><div class="nm">${PC.shiori.n}（你）</div><div class="tx">${m.x}</div></div></div>`;
+    case 'pc': {const p=PC[m.k];return `<div class="msg"><span class="av" style="--c:${p.c}">${p.s}</span><div class="bd"><div class="nm">${p.n}</div><div class="tx">${m.x}</div></div></div>`;}
+    case 'card': {const p=PC[m.k],c=CARDS[m.k];return `<div class="m-card"><div class="h"><span>才能介绍</span><span>${p.n}</span></div><div class="b"><div class="n">${p.n}</div><span class="t">${c.title}</span><div class="tg">${c.tags.map(t=>`<span class="${t===c.battle?'btl':''}">【${t}】${t===c.battle?' 战斗':''}</span>`).join('')}</div><div class="lim">限制：${c.lim}</div></div></div>`;}
+    case 'stamp': return `<div class="m-stamp ${m.c||''}">${m.x}</div>`;
+    case 'bullet': return `<div class="m-bullet"><span class="k">言弹</span><b>【${m.x}】</b><span class="by">触发：${m.by}</span></div>`;
+    case 'note': return `<div class="m-note">${m.x}</div>`;
+    case 'hide': return `<div class="m-hide">${m.x}</div>`;
+  }
+  return '';
+}
+const toBottom=el=>{el.scrollTop=el.scrollHeight;};
+function addBack(m){ const bl=$('#bLog'); if(!bl) return; bl.insertAdjacentHTML('beforeend',msgHTML(m)); bl.lastElementChild.classList.add('new'); toBottom(bl); openBack(); }
+function openBack(){ const b=$('#back'); if(b&&window.innerWidth<=860){ b.classList.add('open'); const t=$('#bTg'); if(t){t.textContent='收起';t.setAttribute('aria-expanded','true');} } }
+
+/* ---- 舞台小工具 ---- */
+const ROOMS=['教室','食堂','美术室','仓库','医务室','音乐室'];
+const roomPos=r=>{const i=Math.max(0,ROOMS.indexOf(r));return {left:((i%3)+.5)/3*100,top:(Math.floor(i/3)+.5)/2*100};};
+const tk=k=>`<span class="tk" style="--c:${PC[k].c}" title="${PC[k].n}">${PC[k].s}</span>`;
+const WIDGETS={
+ map:{html:w=>{
+   const cap=w.cap||3, crown=PC[w.crown||'shiori'], p=roomPos(w.here), visited=w.visited||[];
+   return `<div class="map"><div class="rooms">${ROOMS.map(r=>`<div class="room ${r===w.here?'here':''} ${visited.includes(r)?'done':''}">${r}</div>`).join('')}<span class="pov" style="--c:${crown.c};left:${p.left}%;top:${p.top}%">${crown.s}</span></div>
+   <div class="team"><div class="team-h">队伍 <b>${w.team.length}</b> / ${cap}</div><div class="slots">${Array.from({length:cap},(_,i)=>{const k=w.team[i];return k?`<span class="tk ${w.fresh&&i===w.team.length-1?'pop':''}" style="--c:${PC[k].c}" title="${PC[k].n}">${PC[k].s}</span>`:'<span class="tk empty"></span>';}).join('')}</div>
+   <p class="mini" style="margin:0">人数上限由主持人决定，推荐 3～4 人。</p>
+   ${(w.gone||[]).length?`<div class="gone">转战后台：${w.gone.map(k=>`<span class="tk pop" style="--c:${PC[k].c}">${PC[k].s}</span>${PC[k].n}`).join('')}</div>`:''}</div></div>`;},
+  bind:(el,w,animate)=>{ if(!animate||!w.from) return; const pov=$('.pov',el); const a=roomPos(w.from),b=roomPos(w.here); pov.style.transition='none'; pov.style.left=a.left+'%'; pov.style.top=a.top+'%'; void pov.offsetWidth; pov.style.transition=''; setTimeout(()=>{pov.style.left=b.left+'%';pov.style.top=b.top+'%';},60); }},
+ memo:{html:w=>`<div class="w-pad"><div class="h3">${w.t}</div>${w.ol?`<ol class="memo-ol">${w.li.map(x=>`<li>${x}</li>`).join('')}</ol>`:`<ul class="pts">${w.li.map(x=>`<li>${x}</li>`).join('')}</ul>`}</div>`},
+ why:{html:()=>`<div class="why">${[['认识角色','每个人都被好好介绍'],['RP 机会','主视角和每个人都有对手戏'],['展开剧情','主持人顺势埋下线索'],['前台清楚','队伍有上限，不挤成一团']].map((x,i)=>`<div class="pop" ${D(i*140)}><i>${['壹','贰','叁','肆'][i]}</i>${x[0]}<p class="mini" style="margin:4px 0 0">${x[1]}</p></div>`).join('')}</div>`},
+ sched:{html:w=>`<div class="sched"><div class="pop"><b>${w.d}</b><span>天</span></div><em>×</em><div class="pop" ${D(160)}><b>${w.s}</b><span>时段</span></div><em>×</em><div class="pop" ${D(320)}><b>${w.a}</b><span>次行动／人</span></div></div><p class="mini" style="text-align:center;margin:-6px 0 12px">规模必须公开，玩家才能规划。</p>`},
+ plan:{html:()=>`<div class="plan"><span class="h">第一天</span><span class="h">早</span><span class="h">午</span><span class="h">夜</span><span class="h">你的安排</span><span class="pop">食堂 ${tk('shiori')}</span><span style="color:var(--muted)">模糊处理</span><span class="pop" ${D(200)}>仓库 ${tk('shiori')}</span></div>`},
+ studio:{html:()=>`<div class="studio"><div class="studio-win rv"><span class="tt">片场讨论组：早乙女萌 × 柊由纪</span>${msgHTML(pc('moe','由纪，教我包扎好不好？练舞常常扭到脚。'))}${msgHTML(pc('yuki','好啊。先把脚踝垫高……'))}</div><div class="studio-flow"><span class="rv" ${D(350)}>提交想纳入正史的段落</span><span class="rv" ${D(650)}>主持人审核</span><span class="ok stampin" ${D(950)}>通过：纳入正史，可获得剧情点</span><span class="ng rv" ${D(1200)}>没申请或没通过：只是一次普通聚会，不能当学裁证据</span></div></div>`},
+ studio2:{html:()=>`<div class="studio"><div class="studio-flow" style="grid-column:1/-1"><span class="rv">RP 得很精彩，或谈到重要协议、剧情事件</span><span class="rv" ${D(300)}>把这段剧情提交主持人审核</span><span class="ok stampin" ${D(650)}>通过：纳入正史，可获得剧情点</span><span class="ng rv" ${D(900)}>没通过或没申请：视为一次普通聚会，不能当学裁证据或剧情事件</span></div></div>`},
+ shop:{html:()=>`<div class="shop"><div class="shop-h"><span>剧情点购买（私下提交）</span><b data-pts>5 点</b></div><div class="shop-list">${SHOP.map((x,i)=>`<button type="button" data-shop="${i}" ${x[1]>5?'disabled':''}><span>${x[0]}</span><em>${x[1]} 点</em></button>`).join('')}</div></div>`,
+  bind:el=>{ let pts=5; $$('[data-shop]',el).forEach(b=>b.addEventListener('click',()=>{ const x=SHOP[+b.dataset.shop]; if(pts<x[1]) return; pts-=x[1]; $('[data-pts]',el).textContent=pts+' 点'; addBack(me(`提交购买：${x[0]}（−${x[1]}）`)); setTimeout(()=>addBack(gm(x[2])),500); $$('[data-shop]',el).forEach(bb=>{bb.disabled=SHOP[+bb.dataset.shop][1]>pts;}); })); }},
+ scenes:{html:()=>`<div class="scenes"><div class="scene-list">${['音乐室','仓库','美术室','医务室'].map((r,i)=>`<span class="pop" ${D(i*100)}>${r}</span>`).join('')}</div><div class="topics rv" ${D(450)}>本案话题：<span class="tag big"><span>3 个</span></span><span class="mini" style="margin:0">探索足够时，话题会自动成立</span></div></div>`},
+ desc:{html:w=>{ let n=0; const txt=DESC[w.place].replace(/\[\[(.+?)\]\]/g,(_,k)=>`<button type="button" class="kw" data-kw="${k}" style="--d:${(n++)*180}ms" tabindex="-1">${k}</button>`);
+   const head=w.eye==='button'?'<button type="button" class="btn pink" data-eye>使用【观察眼】</button>':(w.eye===true?T('观察眼　已使用','dark'):'');
+   return `<div class="desc"><div class="desc-h"><b>调查：${w.place}</b><span data-eyebox>${head}</span></div><div class="desc-t rv">${txt}</div></div>`;},
+  bind:(el,w)=>{ const box=$('.desc',el); const on=()=>{box.classList.add('eye');$$('.kw',box).forEach(k=>k.tabIndex=0);}; if(w.eye===true) on();
+   const b=$('[data-eye]',el); if(b) b.addEventListener('click',()=>{ on(); $('[data-eyebox]',el).innerHTML=T('观察眼　已使用','dark'); addBack(note('【观察眼】标出了这个地点的关键词。')); });
+   $$('.kw',box).forEach(k=>k.addEventListener('click',()=>{ if(!box.classList.contains('eye')||k.classList.contains('noted')) return; k.classList.add('noted'); addBack(note('笔记：'+k.dataset.kw)); })); }},
+ seats:{html:w=>`<div class="seats">${Object.keys(PC).map(k=>{ if(k==='hide') return `<div class="seat mute"><span class="tk" style="--c:#777">✕</span>${PC[k].n}<em>已故</em></div>`; const all=w.on==='all', on=all||w.on.includes(k); return `<div class="seat ${all?'':(on?'talk':'mute')}"><span class="tk" style="--c:${PC[k].c}">${PC[k].s}</span>${PC[k].n}${on?'':'<em>旁听</em>'}</div>`; }).join('')}</div>`},
+ vote:{html:w=>`<div class="vote"><div class="vote-q">${w.q}</div><div class="vote-opts">${w.opts.map((o,i)=>`<button type="button" class="vote-opt" data-v="${i}"><i></i><span>${o}</span><b></b></button>`).join('')}</div><p class="mini" data-hint>点一个选项投票</p></div>`,
+  bind:(el,w,animate)=>{ const box=$('.vote',el); const tot=Math.max(1,w.tally.reduce((a,b)=>a+b,0));
+   const reveal=mine=>{ if(box.dataset.done) return; box.dataset.done='1'; $$('.vote-opt',box).forEach((b,i)=>{ b.disabled=true; if(i===mine) b.setAttribute('aria-pressed','true'); $('b',b).textContent=w.tally[i]+' 票'; setTimeout(()=>{$('i',b).style.width=(w.tally[i]/tot*100)+'%';},30); if(i===w.result) b.classList.add('win'); }); $('[data-hint]',box).textContent='结果：'+w.opts[w.result]; };
+   $$('.vote-opt',box).forEach((b,i)=>b.addEventListener('click',()=>reveal(i)));
+   if(!animate) reveal(-1); else setTimeout(()=>{ if(document.body.contains(box)) reveal(-1); },3000); }}
+};
+function paintWidget(el,w,animate){
+  if(!el) return;
+  if(!w){ el.hidden=true; el.innerHTML=''; return; }
+  el.hidden=false; el.classList.toggle('still',!animate);
+  el.innerHTML=WIDGETS[w.type].html(w);
+  if(WIDGETS[w.type].bind) WIDGETS[w.type].bind(el,w,animate);
+}
+
+/* ---- 舞台 ---- */
+const STAGE_HTML=`<div class="stage" id="stage"><section class="front" id="front"><header class="front-head"><b>前台</b><span class="chip" id="fMode"></span><span class="chip w" id="fLoc"></span></header><div class="widget" id="fW" hidden></div><div class="log" id="fLog"></div></section><aside class="back" id="back"><header class="back-head"><b>你的后台</b><span class="ptc" id="bPts"></span><button type="button" class="back-tg" id="bTg" aria-expanded="false">展开</button></header><div class="bwidget" id="bW" hidden></div><div class="log" id="bLog"></div></aside></div>`;
+function stageState(g,k){
+  const st={front:[],back:[],mode:'前台',loc:'',pts:null,q:null,w:null,bw:null,court:false};
+  for(let i=0;i<=k;i++){ const s=g.steps[i];
+    if(s.clearFront) st.front=[]; if(s.clearBack) st.back=[];
+    (s.front||[]).forEach(m=>st.front.push(Object.assign({i},m)));
+    (s.back||[]).forEach(m=>st.back.push(Object.assign({i},m)));
+    ['mode','loc','pts','q','court'].forEach(p=>{ if(p in s) st[p]=s[p]; });
+    if('widget' in s) st.w=s.widget; if('bwidget' in s) st.bw=s.bwidget;
+  }
+  return st;
+}
+async function renderStage(g,animate){
+  const run=RUN, k=STEP, s=g.steps[k], st=stageState(g,k);
+  $$('#stage .alarm,#stage .banner,#front .fly-bullet').forEach(e=>e.remove());
+  $('#fMode').textContent=st.mode; const loc=$('#fLoc'); loc.textContent=st.loc; loc.hidden=!st.loc;
+  $('#front').classList.toggle('court',!!st.court);
+  const pt=$('#bPts'); const txt=[st.pts!=null?`剧情点 ${st.pts}`:'',st.q!=null?`学裁提问 ${st.q}`:''].filter(Boolean).join('　');
+  pt.textContent=txt; pt.hidden=!txt;
+  if(animate&&(('pts' in s)||('q' in s))){ pt.classList.remove('bump'); void pt.offsetWidth; pt.classList.add('bump'); }
+  const prevW=k>0?stageState(g,k-1):null;
+  const wChanged=!prevW||JSON.stringify(prevW.w)!==JSON.stringify(st.w);
+  const bwChanged=!prevW||JSON.stringify(prevW.bw)!==JSON.stringify(st.bw);
+  if(!animate||wChanged) paintWidget($('#fW'),st.w,animate);
+  if(!animate||bwChanged) paintWidget($('#bW'),st.bw,animate);
+  const fl=$('#fLog'), bl=$('#bLog');
+  const fNew=st.front.filter(m=>m.i===k), bNew=st.back.filter(m=>m.i===k);
+  fl.innerHTML=st.front.filter(m=>m.i<k).map(msgHTML).join('');
+  bl.innerHTML=st.back.filter(m=>m.i<k).map(msgHTML).join('');
+  if(!animate){ fl.insertAdjacentHTML('beforeend',fNew.map(msgHTML).join('')); bl.insertAdjacentHTML('beforeend',bNew.map(msgHTML).join('')); toBottom(fl); toBottom(bl); return; }
+  toBottom(fl); toBottom(bl);
+  if(bNew.length||st.bw&&bwChanged) openBack();
+  ANIM=true;
+  if(s.fx){ const ok=await stageFx(s.fx); if(!ok) return; }
+  const seq=fNew.map(m=>[fl,m]).concat(bNew.map(m=>[bl,m]));
+  for(const [el,m] of seq){
+    if(run!==RUN) return;
+    if(m.t==='bullet'){ flyBullet(m); if(!(await wait(760))) return; }
+    el.insertAdjacentHTML('beforeend',msgHTML(m)); el.lastElementChild.classList.add('new'); toBottom(el);
+    if(!(await wait(m.t==='sys'?420:m.t==='stamp'?700:m.t==='card'?800:720))) return;
+  }
+  if(run===RUN) ANIM=false;
+}
+function stageFx(fx){
+  const stg=$('#stage');
+  if(fx==='alarm') stg.insertAdjacentHTML('beforeend','<div class="alarm"></div><div class="banner">尸体发现</div>');
+  if(fx==='court') stg.insertAdjacentHTML('beforeend','<div class="banner">学级裁判　开庭</div>');
+  return wait(1500).then(ok=>{ $$('#stage .alarm,#stage .banner').forEach(e=>e.remove()); return ok; });
+}
+function flyBullet(m){ const f=$('#front'); f.insertAdjacentHTML('beforeend',`<div class="fly-bullet"><span class="k">言弹</span><b>【${m.x}】</b></div>`); const el=f.lastElementChild; setTimeout(()=>el.remove(),900); }
+
+/* ---- 死凶对决 ---- */
+function merge(a,b){ for(const k in b){ const v=b[k]; if(v&&typeof v==='object'&&!Array.isArray(v)&&a[k]&&typeof a[k]==='object') merge(a[k],v); else a[k]=v; } return a; }
+function btState(cs,k){ const st=clone(cs.init); for(let i=0;i<=k;i++) if(cs.steps[i].set) merge(st,clone(cs.steps[i].set)); return st; }
+function eff(st,side){
+  const p=st[side], isDef=st.def===side;
+  const w=p.drugged?0:((isDef&&st.first&&!p.fore)?0:p.w.v);
+  const t=p.drugged?0:(p.block?0:p.t.v);
+  const m=p.cancelM?0:p.m.v;
+  return {w,t,m,tot:w+t+m,rem:p.hp-p.weak-((p.poison&&!p.antidote)?1:0)};
+}
+function calc(st){ const A=eff(st,'a'),B=eff(st,'b'),advA=A.tot-B.tot; return {A,B,advA,advB:-advA,killB:advA>=B.rem,killA:-advA>=A.rem}; }
+function fighter(st,side,c,prev,animate){
+  const p=st[side], e=side==='a'?c.A:c.B, isDef=st.def===side, hide=!st.show[side];
+  const pc2=prev?calc(prev):null, pe=pc2?(side==='a'?pc2.A:pc2.B):null, pp=prev?prev[side]:null;
+  const sl=(k,lab)=>{ const off=p[k].v!==e[k]; let why=''; if(off){ why=k==='w'?(p.drugged?'药效':'受袭首轮'):k==='t'?(p.drugged?'药效':'限制成立'):'已解除'; }
+    const chg=animate&&prev&&!hide&&(pe[k]!==e[k]||pp[k].n!==p[k].n||(!prev.show[side]&&st.show[side]));
+    return `<div class="sl ${off?'off':''} ${hide?'hide':''} ${chg?'chg':''}" ${chg?D({w:0,t:160,m:320}[k]):''}><span>${lab}</span><i>${p[k].n?esc(p[k].n):'—'}</i><b>${e[k]}</b>${off&&!hide?`<em>${why}</em>`:''}</div>`; };
+  const lost=Math.min(p.hp,Math.max(0,p.hp-e.rem)), prevLost=pe?Math.min(pp.hp,Math.max(0,pp.hp-pe.rem)):lost;
+  const pips=Array.from({length:p.hp},(_,i)=>{ const isLost=i>=p.hp-lost; const crack=animate&&isLost&&i<p.hp-prevLost; return `<i class="${isLost?(crack?'crack':'lost'):''}"></i>`; }).join('');
+  const chips=[]; const hpTag={1:'病弱',3:'强壮',4:'超级强壮'}[p.hp]; if(hpTag) chips.push([hpTag,'']);
+  if(isDef&&st.first) chips.push(['受袭首轮','']); if(p.fore) chips.push(['预判','p']); if(p.weak) chips.push([`虚弱 ${p.weak}`,'k']); if(p.poison) chips.push([p.antidote?'中毒（解毒中）':'中毒','p']); else if(p.antidote) chips.push(['已用解毒','']); if(p.drugged) chips.push(['昏迷','k']); if(p.block) chips.push(['限制成立','k']);
+  const deadNew=animate&&prev&&p.dead&&!pp.dead;
+  return `<section class="ft ${side} ${p.dead?'dead':''}"><div class="ft-h"><span class="rl">${p.role}</span><b>${esc(p.name)}</b></div>
+  <div class="ft-mid"><span class="sil" style="--c:${p.c}">${p.s}</span><div class="stc">${chips.map(x=>`<span class="${x[1]}">${x[0]}</span>`).join('')||'<span>状态正常</span>'}</div></div>
+  <div class="sl3">${sl('w','凶器')}${sl('t','才能')}${sl('m','机关')}</div>
+  <div class="tot"><span>标签合计</span><b>${hide?'?':e.tot}</b></div>
+  <div class="gate"><span>剩余门槛</span><div class="pips">${pips}</div><b>${e.rem}</b></div>
+  ${p.dead?`<div class="dead-st ${deadNew?'stampin':''}" ${deadNew?D(250):''}>死亡</div>`:''}</section>`;
+}
+function diceHTML(st,d){
+  const sum=a=>a.reduce((x,y)=>x+y,0), sa=sum(d.a), sb=sum(d.b), win=sa>sb?'a':sb>sa?'b':'';
+  const dz=(side,arr,s)=>`<div class="dz ${win===side?'win':''}"><small>${esc(st[side].name)}　${arr.length>1?`1d10＋${arr.length-1}d4`:'1d10'}</small><div class="dd">${arr.map((v,i)=>`<span class="die ${i?'d4':''}" data-v="${v}" data-max="${i?4:10}">${v}</span>`).join('')}</div><b>${s}</b></div>`;
+  return `<div class="dice">${dz('a',d.a,sa)}<span class="dvs">对</span>${dz('b',d.b,sb)}</div>`;
+}
+function checkHTML(st,c){
+  return `<div class="ck ${c.killB?'hit':''}">${esc(st.a.name)} 优势 ${sg(c.advA)} ≥ ${esc(st.b.name)} 门槛 ${c.B.rem}？<b>${c.killB?'成立':'未达'}</b></div><div class="ck ${c.killA?'hit':''}">${esc(st.b.name)} 优势 ${sg(c.advB)} ≥ ${esc(st.a.name)} 门槛 ${c.A.rem}？<b>${c.killA?'成立':'未达'}</b></div>`;
+}
+function midHTML(st,c,s){
+  const hideAdv=!st.show.a||!st.show.b, cl=Math.max(-4,Math.min(4,c.advA)), width=Math.abs(cl)/8*100, left=cl>=0?50:50-width;
+  return `<section class="mid"><div class="rd">第 ${st.round} 轮${st.first?'<span>受袭首轮</span>':''}</div>
+  <div><div class="adv-l"><span>${esc(st.a.name)}</span><span>${esc(st.b.name)}</span></div><div class="adv-bar"><i style="left:${hideAdv?50:left}%;width:${hideAdv?0:width}%"></i></div></div>
+  <div class="adv-n">${hideAdv?'等待填表':`${esc(st.a.name)} 的优势<b>${sg(c.advA)}</b>`}</div>
+  ${s.dice?diceHTML(st,s.dice):''}${s.ckHTML||(s.check?checkHTML(st,c):'')}
+  ${s.verdict?`<div class="vd ${s.vsoft?'soft':''} ${s.noAnim?'':'stampin'}" ${s.noAnim?'':D(s.dice?950:200)}>${s.verdict}</div>`:''}</section>`;
+}
+function renderBattle(g,animate){
+  const run=RUN, f=g.flat[STEP], cs=g.cases[f.ci], s=cs.steps[f.si];
+  const tabs=g.cases.length>1?`<div class="bt-tabs">${g.cases.map((x,i)=>`<button type="button" data-case="${i}" aria-current="${i===f.ci}">${x.name}</button>`).join('')}</div>`:'';
+  const rail=`<div class="rail">${PHASES.map((p,i)=>`<span class="${i===s.phase?'on':(s.phase>i?'past':'')}">${p}</span>`).join('')}</div>`;
+  const root=$('#btIn'); root.classList.toggle('still',!animate);
+  if(s.sandbox){ root.innerHTML=tabs+rail+'<div id="sbxArena"></div><div class="extra" id="sbxCtl"></div>'; bindTabs(g); sandbox(cs); return; }
+  const st=btState(cs,f.si), prev=f.si>0?btState(cs,f.si-1):null, c=calc(st);
+  const arena=s.hide?'':`<div class="arena" style="position:relative">${st.env?'<div class="water"></div>':''}${fighter(st,'a',c,prev,animate)}${midHTML(st,c,s)}${fighter(st,'b',c,prev,animate)}</div>`;
+  root.innerHTML=tabs+(s.hide?'':rail)+arena+(s.extra?`<div class="extra rv" ${D(300)}>${s.extra()}</div>`:'');
+  bindTabs(g);
+  const at=$('.bt-tabs [aria-current="true"]',root); if(at) at.scrollIntoView({block:'nearest',inline:'center'});
+  $('#bt').scrollTop=0;
+  if(animate&&s.dice){ ANIM=true; rollDice(root,run); }
+}
+function rollDice(root,run){
+  const box=$('.dice',root); if(!box) return; box.classList.add('rolling');
+  const dice=$$('.die',box); const t=setInterval(()=>dice.forEach(d=>{d.textContent=1+Math.floor(Math.random()*(+d.dataset.max));}),70);
+  setTimeout(()=>{ clearInterval(t); dice.forEach(d=>{d.textContent=d.dataset.v;}); box.classList.remove('rolling'); if(run===RUN) ANIM=false; },RM?0:900);
+}
+function bindTabs(g){ $$('.bt-tabs [data-case]').forEach(b=>b.addEventListener('click',()=>{ const ci=+b.dataset.case; go(SEG,g.flat.findIndex(x=>x.ci===ci),true); })); }
+function sandbox(cs){
+  let S=clone(cs.init); const log=[];
+  const arena=$('#sbxArena'), ctl=$('#sbxCtl');
+  const sw=(label,path,opts)=>{ const cur=path.reduce((o,k)=>o[k],S); return `<div class="sbx-row"><span>${label}</span><div class="seg-sw">${opts.map(o=>`<button type="button" data-path="${path.join('.')}" data-val='${JSON.stringify(o[1])}' aria-pressed="${JSON.stringify(cur)===JSON.stringify(o[1])}">${o[0]}</button>`).join('')}</div></div>`; };
+  const onoff=(label,path)=>sw(label,path,[['关',false],['开',true]]);
+  const side=(k,title)=>`<div class="sbx-side"><h4>${title}</h4>${sw('原始门槛',[k,'hp'],[['1',1],['2',2],['3',3],['4',4]])}${sw('凶器',[k,'w','v'],[['0',0],['1',1],['射击 2',2]])}${sw('才能',[k,'t','v'],[['0',0],['战斗 1',1]])}${sw('机关',[k,'m','v'],[['0',0],['1',1]])}${sw('虚弱',[k,'weak'],[['0',0],['1',1],['2',2],['3',3]])}${onoff('中毒',[k,'poison'])}${onoff('已用解毒',[k,'antidote'])}${onoff('限制成立',[k,'block'])}${onoff('机关被解除',[k,'cancelM'])}${k==='b'?onoff('预判',[k,'fore']):''}</div>`;
+  const draw=(mid)=>{ const c=calc(S); arena.innerHTML=`<div class="arena">${fighter(S,'a',c,null,false)}${midHTML(S,c,mid||{check:true,noAnim:true})}${fighter(S,'b',c,null,false)}</div>`; };
+  const drawCtl=()=>{ ctl.innerHTML=`<div class="sbx">${side('a','行凶方 A')}${side('b','受袭方 B')}</div><div class="sbx-row" style="margin-top:8px"><span>受袭首轮</span><div class="seg-sw"><button type="button" data-path="first" data-val="true" aria-pressed="${S.first}">是</button><button type="button" data-path="first" data-val="false" aria-pressed="${!S.first}">否</button></div></div><div class="sbx-act"><button type="button" class="btn pink" data-act="roll">掷骰一轮</button><button type="button" class="btn" data-act="reset">重置</button></div><div class="sbx-log">${log.length?log.map(x=>`<p>${x}</p>`).join(''):'<p>还没有掷骰。</p>'}</div>`;
+    $$('[data-path]',ctl).forEach(b=>b.addEventListener('click',()=>{ const path=b.dataset.path.split('.'); const val=JSON.parse(b.dataset.val); let o=S; for(let i=0;i<path.length-1;i++) o=o[path[i]]; o[path[path.length-1]]=val; S.a.dead=S.b.dead=false; draw(); drawCtl(); }));
+    $('[data-act="roll"]',ctl).addEventListener('click',roll); $('[data-act="reset"]',ctl).addEventListener('click',()=>{ S=clone(cs.init); log.length=0; draw(); drawCtl(); }); };
+  const roll=()=>{
+    if(S.a.dead||S.b.dead){ log.push('对决已经结束，按「重置」重新开始。'); drawCtl(); return; }
+    const c=calc(S);
+    if(c.killA||c.killB){ if(c.killA) S.a.dead=true; if(c.killB) S.b.dead=true; log.push(`第 ${S.round} 轮掷骰前：必杀成立。`); draw({check:true,verdict:c.killA&&c.killB?'同时死亡':'必杀成立',noAnim:true}); drawCtl(); return; }
+    const r=n=>1+Math.floor(Math.random()*n), na=Math.max(0,c.advA), nb=Math.max(0,c.advB);
+    const da=[r(10)].concat(Array.from({length:na},()=>r(4))), db=[r(10)].concat(Array.from({length:nb},()=>r(4)));
+    const sa=da.reduce((x,y)=>x+y,0), sb=db.reduce((x,y)=>x+y,0);
+    let v='平手'; if(sa>sb){S.b.weak++;v=`${S.b.name} 虚弱 +1`;} else if(sb>sa){S.a.weak++;v=`${S.a.name} 虚弱 +1`;}
+    const c2=calc(S), ck=checkHTML(S,c2);
+    if(c2.killA&&c2.killB){S.a.dead=S.b.dead=true;v+='，同时死亡';} else if(c2.killB){S.b.dead=true;v+=`，${S.b.name} 死亡`;} else if(c2.killA){S.a.dead=true;v+=`，${S.a.name} 死亡`;}
+    log.push(`第 ${S.round} 轮：${sa} 对 ${sb}，${v}。`);
+    const ended=S.a.dead||S.b.dead;
+    const mid={dice:{a:da,b:db},ckHTML:ck,verdict:ended?(S.a.dead&&S.b.dead?'同时死亡':'必杀成立'):(sa===sb?'平手':'虚弱 +1'),vsoft:!ended,noAnim:true};
+    if(!ended){ S.round++; S.first=false; }
+    draw(mid); drawCtl();
+  };
+  draw(); drawCtl();
+}
+
+/* ---- 页面与附录 ---- */
+function renderPage(g,animate){ const s=g.steps[STEP], root=$('#page'); root.classList.toggle('still',!animate); root.innerHTML=s.view(); root.scrollTop=0; if(s.bind) s.bind(root,animate); }
+let APX_TAB=0;
+function renderAppendix(g,animate){
+  const root=$('#page'); root.classList.toggle('still',!animate);
+  const draw=()=>{ root.innerHTML=`<div class="pg"><h2 class="h-tab rv"><span>附录</span></h2><div class="apx-tabs rv" ${D(100)}>${APX_TABS.map((t,i)=>`<button type="button" data-tab="${i}" aria-pressed="${i===APX_TAB}">${t[0]}</button>`).join('')}</div><div class="rv" ${D(200)}>${APX_TABS[APX_TAB][1]()}</div></div>`;
+    $$('[data-tab]',root).forEach(b=>b.addEventListener('click',()=>{ APX_TAB=+b.dataset.tab; draw(); })); };
+  draw();
+}
+
+/* ---- 导览 ---- */
+function capOf(){ const g=VIEW[SEG]; if(g.type==='battle'){ const f=g.flat[STEP]; return g.cases[f.ci].steps[f.si].cap; } return g.steps[STEP].cap||''; }
+function chrome(){
+  const g=VIEW[SEG], n=count(g), last=SEG===VIEW.length-1&&STEP===n-1;
+  $('#segKick').textContent=g.kick; $('#segTitle').textContent=g.title;
+  $('#prog').textContent=`${STEP+1} / ${n}`;
+  $('#stepbar').innerHTML=Array.from({length:n},(_,i)=>`<i class="${i<STEP?'done':i===STEP?'on':''}"></i>`).join('');
+  $('#prevBtn').disabled=SEG===0&&STEP===0;
+  $('#nextBtn').disabled=last;
+  $('#nextBtn').textContent=last?'完':(STEP===n-1?'下一段':'下一步');
+  $$('#menu button').forEach((b,i)=>b.setAttribute('aria-current',String(i===SEG)));
+  var hasR=!!(g.rules&&g.rules.length);
+  $('#rulesBtn').hidden=!hasR;
+  $('#rulesBtn').classList.toggle('unread',hasR&&!READ.has(g.id));
+  $('#rulesBtn').setAttribute('aria-label',hasR&&!READ.has(g.id)?'细则（尚未看过）':'细则');
+}
+function stepObj(){ const g=VIEW[SEG]; if(g.type==='battle'){ const f=g.flat[STEP]; return g.cases[f.ci].steps[f.si]; } return g.steps[STEP]||{}; }
+function setCaption(animate){ const c=$('#caption'); const s=stepObj(); c.innerHTML=(s&&s.gm?'<span class="gm-only">主持人</span>':'')+capOf(); c.classList.remove('typing'); if(animate&&!RM){ void c.offsetWidth; c.classList.add('typing'); } c.scrollTop=0; }
+function mount(i){
+  MOUNTED=i; const g=VIEW[i];
+  if(g.type==='page'||g.type==='appendix') scene.innerHTML='<div class="page" id="page"></div>';
+  else if(g.type==='stage'){ scene.innerHTML=STAGE_HTML; $('#bTg').addEventListener('click',()=>{ const b=$('#back'), open=!b.classList.contains('open'); b.classList.toggle('open',open); $('#bTg').textContent=open?'收起':'展开'; $('#bTg').setAttribute('aria-expanded',String(open)); }); }
+  else scene.innerHTML='<div class="bt" id="bt"><div class="bt-in" id="btIn"></div></div>';
+}
+function render(animate){
+  RUN++; ANIM=false;
+  const g=VIEW[SEG];
+  setCaption(animate);
+  if(g.type==='page') renderPage(g,animate);
+  else if(g.type==='stage') renderStage(g,animate);
+  else if(g.type==='battle') renderBattle(g,animate);
+  else renderAppendix(g,animate);
+  chrome();
+}
+function wipe(g){
+  return new Promise(res=>{
+    const w=$('#wipe'); $('#wipeKick').textContent=g.kick; $('#wipeTitle').textContent=g.title;
+    w.classList.remove('run'); void w.offsetWidth; w.classList.add('run');
+    setTimeout(()=>res('mid'),560);
+    setTimeout(()=>w.classList.remove('run'),1350);
+  });
+}
+async function go(seg,step,animate=true){
+  if(BUSY) return;
+  closePanels();
+  const change=seg!==MOUNTED;
+  SEG=seg; STEP=step; save();
+  if(change){
+    RUN++; ANIM=false;
+    if(animate&&!RM){ BUSY=true; await wipe(VIEW[seg]); mount(seg); await new Promise(r=>setTimeout(r,280)); BUSY=false; }
+    else mount(seg);
+  }
+  render(animate);
+}
+function next(){ if(BUSY) return; if(ANIM){ render(false); return; } const n=count(VIEW[SEG]); if(STEP<n-1) go(SEG,STEP+1); else if(SEG<VIEW.length-1) go(SEG+1,0); }
+function prev(){ if(BUSY) return; if(STEP>0) go(SEG,STEP-1,false); else if(SEG>0) go(SEG-1,count(VIEW[SEG-1])-1,false); }
+function save(){ try{ localStorage.setItem(KEY,JSON.stringify({seg:SEG,step:STEP})); }catch(e){} }
+function load(){ try{ const o=JSON.parse(localStorage.getItem(KEY)||'null'); if(o&&VIEW[o.seg]&&o.step>=0&&o.step<count(VIEW[o.seg])) return o; }catch(e){} return {seg:0,step:0}; }
+
+/* ---- 目录、细则、主题 ---- */
+function closePanels(){ $('#menu').classList.remove('open'); $('#drawer').classList.remove('open'); $('#scrim').hidden=true; $('#menuBtn').setAttribute('aria-expanded','false'); $('#rulesBtn').setAttribute('aria-expanded','false'); }
+
+$('#menuBtn').addEventListener('click',()=>{ const open=!$('#menu').classList.contains('open'); closePanels(); if(open){ $('#menu').classList.add('open'); $('#scrim').hidden=false; $('#menuBtn').setAttribute('aria-expanded','true'); } });
+$('#rulesBtn').addEventListener('click',()=>{ const g=VIEW[SEG]; const open=!$('#drawer').classList.contains('open'); closePanels(); if(!open) return;
+  $('#drawerTitle').textContent='细则：'+g.title; $('#drawerBody').innerHTML=(g.rules||[]).map(r=>`<h4>${r[0]}</h4><ul>${r[1].map(x=>`<li>${x}</li>`).join('')}</ul>`).join('');
+  $('#drawer').classList.add('open'); $('#scrim').hidden=false; $('#rulesBtn').setAttribute('aria-expanded','true');
+  markRead(g.id); $('#rulesBtn').classList.remove('unread'); });
+$('#drawerClose').addEventListener('click',closePanels);
+$('#scrim').addEventListener('click',closePanels);
+$('#nextBtn').addEventListener('click',next);
+$('#prevBtn').addEventListener('click',prev);
+document.addEventListener('keydown',e=>{
+  if(e.target&&/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) return;
+  if(e.key==='Escape'){ closePanels(); return; }
+  if(e.key==='ArrowRight'||e.key==='PageDown'){ e.preventDefault(); next(); }
+  if(e.key==='ArrowLeft'||e.key==='PageUp'){ e.preventDefault(); prev(); }
+});
+(function theme(){
+  const root=document.documentElement;
+  try{ const t=localStorage.getItem(KEY+'-theme'); if(t) root.setAttribute('data-theme',t); }catch(e){}
+  $('#themeBtn').addEventListener('click',()=>{ const cur=root.getAttribute('data-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'); const nx=cur==='dark'?'light':'dark'; root.setAttribute('data-theme',nx); try{localStorage.setItem(KEY+'-theme',nx);}catch(e){} });
+})();
+
+buildView();
+const start=load();
+go(start.seg,start.step,true);
+
+})();
+</script>
+</body>
+</html>
