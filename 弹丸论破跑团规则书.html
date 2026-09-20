@@ -1367,7 +1367,7 @@ function buildView(){
   buildMenu();
 }
 function buildMenu(){
-  const sheetLink=`<a class="menu-out" href="人物卡.html" target="_blank" rel="noopener"><small>附录</small><b>人物卡模板</b></a>`;
+  const sheetLink=`<a class="menu-out" href="超高校级才能者_人物卡.html" target="_blank" rel="noopener"><small>附录</small><b>人物卡模板</b></a>`;
   $('#menu').innerHTML=VIEW.map((g,i)=>`<button type="button" data-seg="${i}"><small>${g.kick}</small><b>${g.title}</b></button>`).join('')+sheetLink;
   $$('#menu [data-seg]').forEach(b=>b.addEventListener('click',()=>go(+b.dataset.seg,0)));
 }
